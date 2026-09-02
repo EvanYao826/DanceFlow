@@ -7,5 +7,6 @@ declare module 'vue-router' {
     requiresAuth?: boolean
     requiresAdmin?: boolean
     guestOnly?: boolean
+    portal?: 'user' | 'admin'
   }
 }

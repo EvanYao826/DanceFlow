@@ -21,7 +21,7 @@ const activePath = computed(() => route.path)
       <div class="brand"><BrandLogo variant="white" :height="32" to="/admin" /></div>
       <p class="section-label">社团管理</p>
       <nav><router-link v-for="item in items" :key="item.path" :to="item.path" :class="{ active: activePath === item.path }">{{ item.label }}</router-link></nav>
-      <div class="sidebar-bottom"><el-button link @click="router.push('/')">返回用户端</el-button><el-button link @click="auth.logout(); router.push('/login')">退出登录</el-button></div>
+      <div class="sidebar-bottom"><el-button link @click="auth.logout(); router.push('/login?admin=1&redirect=/admin')">退出管理端</el-button></div>
     </aside>
     <div class="admin-main"><header class="admin-header"><span>{{ route.meta.title || '管理端' }}</span><span class="user-name">{{ auth.user?.nickname || '管理员' }}</span></header><main class="admin-content"><router-view /></main></div>
   </div>
