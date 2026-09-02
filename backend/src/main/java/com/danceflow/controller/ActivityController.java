@@ -48,6 +48,11 @@ public class ActivityController {
         return Result.ok(applyService.mine(((AuthUser) authentication.getPrincipal()).id()));
     }
 
+    @GetMapping("/admin/activities/{id}/applications")
+    public Result<java.util.List<ActivityApplyVO>> applications(@PathVariable Long id) {
+        return Result.ok(applyService.forActivity(id));
+    }
+
     @PostMapping("/admin/activities")
     public Result<ActivityVO> create(Authentication authentication, @Valid @RequestBody ActivityRequest request) {
         return Result.ok(activityService.create(((AuthUser) authentication.getPrincipal()).id(), request));

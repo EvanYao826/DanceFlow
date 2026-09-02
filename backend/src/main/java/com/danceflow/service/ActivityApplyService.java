@@ -32,7 +32,7 @@ public class ActivityApplyService {
 
     @Transactional
     public ActivityApplyVO apply(Long userId, Long activityId, ActivityApplyRequest request) {
-        Activity activity = activityMapper.selectById(activityId);
+        Activity activity = activityMapper.selectForUpdate(activityId);
         if (activity == null || !"PUBLISHED".equals(activity.getStatus())) throw new BusinessException(ResultCode.NOT_FOUND.getCode(), "活动不存在或未发布");
         if (activity.getApplyDeadline().isBefore(LocalDateTime.now())) throw new BusinessException(ResultCode.BAD_REQUEST.getCode(), "报名已截止");
         ActivityApply current = applyMapper.selectForUpdate(activityId, userId);
@@ -56,6 +56,12 @@ public class ActivityApplyService {
 
     public List<ActivityApplyVO> mine(Long userId) {
         return applyMapper.selectList(new LambdaQueryWrapper<ActivityApply>().eq(ActivityApply::getUserId, userId).orderByDesc(ActivityApply::getApplyTime))
+                .stream().map(this::toVO).toList();
+    }
+
+    public List<ActivityApplyVO> forActivity(Long activityId) {
+        return applyMapper.selectList(new LambdaQueryWrapper<ActivityApply>().eq(ActivityApply::getActivityId, activityId)
+                        .eq(ActivityApply::getApplyStatus, "APPLIED").orderByAsc(ActivityApply::getApplyTime))
                 .stream().map(this::toVO).toList();
     }
 
