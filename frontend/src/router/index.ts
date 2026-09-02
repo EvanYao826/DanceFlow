@@ -31,7 +31,9 @@ const router = createRouter({
       children: [
         { path: 'dashboard', name: 'admin', component: () => import('@/views/AdminHomeView.vue'), meta: { title: '工作台' } },
         { path: 'members', name: 'admin-members', component: () => import('@/views/MemberManagementView.vue'), meta: { title: '成员审核' } },
-        { path: 'activities', name: 'admin-activities', component: () => import('@/views/AdminActivitiesView.vue'), meta: { title: '活动管理' } },
+        { path: 'activities', name: 'admin-activities', component: () => import('@/views/ActivityManagementView.vue'), meta: { title: '活动管理' } },
+        { path: 'activities/new', name: 'admin-activity-new', component: () => import('@/views/ActivityEditorView.vue'), meta: { title: '新增活动' } },
+        { path: 'activities/:id/edit', name: 'admin-activity-edit', component: () => import('@/views/ActivityEditorView.vue'), meta: { title: '编辑活动' } },
       ],
     },
     {

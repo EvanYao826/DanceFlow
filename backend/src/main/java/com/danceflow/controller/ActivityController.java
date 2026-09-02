@@ -33,6 +33,9 @@ public class ActivityController {
         return Result.ok(activityService.detail(id, true, userId));
     }
 
+    @GetMapping("/admin/activities/{id}")
+    public Result<ActivityVO> adminDetail(@PathVariable Long id) { return Result.ok(activityService.detail(id, false)); }
+
     @PostMapping("/activities/{id}/apply")
     public Result<ActivityApplyVO> apply(Authentication authentication, @PathVariable Long id, @Valid @RequestBody(required = false) ActivityApplyRequest request) {
         return Result.ok(applyService.apply(((AuthUser) authentication.getPrincipal()).id(), id, request));
