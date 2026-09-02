@@ -25,12 +25,15 @@ const router = createRouter({
     },
     {
       path: '/admin',
-      name: 'admin',
-      component: () => import('@/views/AdminHomeView.vue'),
+      component: () => import('@/layouts/AdminLayout.vue'),
+      redirect: '/admin/dashboard',
       meta: { title: '管理端', requiresAuth: true, requiresAdmin: true },
+      children: [
+        { path: 'dashboard', name: 'admin', component: () => import('@/views/AdminHomeView.vue'), meta: { title: '工作台' } },
+        { path: 'members', name: 'admin-members', component: () => import('@/views/AdminMembersView.vue'), meta: { title: '成员审核' } },
+        { path: 'activities', name: 'admin-activities', component: () => import('@/views/AdminActivitiesView.vue'), meta: { title: '活动管理' } },
+      ],
     },
-    { path: '/admin/members', name: 'admin-members', component: () => import('@/views/AdminMembersView.vue'), meta: { title: '成员审核', requiresAuth: true, requiresAdmin: true } },
-    { path: '/admin/activities', name: 'admin-activities', component: () => import('@/views/AdminActivitiesView.vue'), meta: { title: '活动管理', requiresAuth: true, requiresAdmin: true } },
     {
       path: '/activities',
       name: 'activities',
@@ -57,8 +60,8 @@ const router = createRouter({
     },
     {
       path: '/',
+      redirect: '/club',
       name: 'home',
-      component: () => import('@/views/HomeView.vue'),
       meta: { title: '首页' },
     },
     {
