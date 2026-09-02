@@ -31,9 +31,9 @@ async function submit() {
 
 <template>
   <main class="auth-page">
+    <div class="wave-layer" aria-hidden="true"><span></span><span></span><span></span></div>
     <section class="brand-panel">
-      <BrandLogo class="brand-watermark" variant="white" :height="112" />
-      <div class="brand-top"><span class="brand-mark">DF / 01</span></div>
+      <div class="brand-top"><BrandLogo variant="white" :height="42" to="/" /></div>
       <div class="brand-copy">
         <p class="eyebrow">{{ isAdminLogin ? 'FLOWARTIST ADMIN' : 'FLOWARTIST COMMUNITY' }}</p>
         <h1 v-if="isAdminLogin"><span>管理社团</span><span>每一次跃动</span></h1>
@@ -46,7 +46,6 @@ async function submit() {
     <section class="form-panel">
       <div class="form-wrap">
         <div class="form-heading">
-          <span class="portal-badge"><i></i>{{ isAdminLogin ? '管理端' : '用户端' }}</span>
           <p class="login-context">{{ isAdminLogin ? 'ADMIN PORTAL' : 'WELCOME BACK' }}</p>
           <h2>{{ isAdminLogin ? '管理端登录' : '登录 DanceFlow' }}</h2>
           <p class="form-subtitle">{{ isAdminLogin ? '请输入管理员账号继续' : '登录后进入你的街舞社团空间' }}</p>
@@ -69,13 +68,14 @@ async function submit() {
 <style scoped>
 .auth-page { min-height: 100vh; display: grid; grid-template-columns: minmax(390px, .92fr) minmax(480px, 1.08fr); position: relative; overflow: hidden; background: linear-gradient(115deg, #25123e 0%, #622d86 37%, #c56fd0 61%, #f6eef7 100%); }
 .auth-page::before { content: ''; position: absolute; inset: 0; pointer-events: none; background: linear-gradient(90deg, rgba(22, 10, 39, .34), transparent 58%), repeating-linear-gradient(122deg, transparent 0 110px, rgba(255,255,255,.045) 111px 112px); }
+.wave-layer { position: absolute; inset: auto 0 0; z-index: 0; height: 38%; overflow: hidden; pointer-events: none; opacity: .38; }
+.wave-layer span { position: absolute; left: -8%; width: 116%; height: 180px; border-radius: 48% 52% 0 0 / 30% 30% 0 0; background: rgba(104, 25, 145, .38); transform: translateX(-2%) rotate(-2deg); animation: wave-drift 11s ease-in-out infinite alternate; }
+.wave-layer span:nth-child(1) { bottom: -118px; opacity: .72; }.wave-layer span:nth-child(2) { bottom: -145px; background: rgba(181, 71, 194, .42); transform: translateX(3%) rotate(2deg); animation-duration: 14s; animation-delay: -3s; }.wave-layer span:nth-child(3) { bottom: -168px; background: rgba(68, 18, 108, .3); transform: translateX(-4%) rotate(-1deg); animation-duration: 17s; animation-delay: -6s; }
 .brand-panel, .form-panel { position: relative; z-index: 1; }
 .brand-panel { display: flex; flex-direction: column; padding: 42px clamp(36px, 6vw, 92px); color: #fff; }
 .brand-panel::after { content: 'DF'; position: absolute; right: -28px; bottom: 68px; color: rgba(255,255,255,.08); font-size: clamp(180px, 20vw, 290px); font-weight: 800; line-height: 1; }
 .brand-top, .brand-copy, .brand-foot { position: relative; z-index: 1; }
-.brand-watermark { position: absolute; z-index: 0; right: 8%; bottom: 15%; opacity: .12; transform: rotate(-9deg); filter: saturate(.7); }
-.brand-top { display: flex; align-items: center; justify-content: space-between; }
-.brand-mark { color: rgba(255,255,255,.56); font-size: 11px; letter-spacing: 1.5px; }
+.brand-top { display: flex; align-items: center; }
 .brand-copy { max-width: 430px; margin: auto 0; }
 .eyebrow { margin: 0 0 20px; color: #f3a7ff; font-size: 11px; letter-spacing: 2.2px; font-weight: 700; }
 .brand-copy h1 { display: grid; gap: 3px; margin: 0 0 22px; font-size: clamp(38px, 4.2vw, 58px); line-height: 1.18; letter-spacing: 0; }
@@ -90,6 +90,8 @@ async function submit() {
 .login-context { margin: 27px 0 10px; color: var(--df-primary-600); font-size: 11px; letter-spacing: 2px; font-weight: 700; }.form-wrap h2 { margin: 0; color: var(--df-primary-950); font-size: 30px; line-height: 1.3; }.form-subtitle { margin: 9px 0 30px; color: #766b7b; font-size: 14px; }
 .el-form { text-align: left; }.form-button { width: 100%; height: 46px; margin: 7px 0 20px; border: 0; border-radius: 9px; background: linear-gradient(100deg, #b820d5, #e13ef7); box-shadow: 0 10px 22px rgba(201,30,219,.22); font-weight: 600; }.form-links { display: flex; justify-content: space-between; align-items: center; }
 :deep(.el-form-item) { margin-bottom: 19px; }.el-form-item :deep(.el-form-item__label) { margin-bottom: 7px; color: #4f4454; font-size: 13px; font-weight: 600; }.el-form-item :deep(.el-input__wrapper) { min-height: 44px; padding: 1px 14px; border: 1px solid rgba(105,81,111,.16); border-radius: 9px; background: rgba(255,255,255,.82); box-shadow: none; transition: border-color .2s, box-shadow .2s; }.el-form-item :deep(.el-input__wrapper:hover) { border-color: rgba(201,30,219,.45); }.el-form-item :deep(.el-input__wrapper.is-focus) { border-color: var(--df-primary-400); box-shadow: 0 0 0 3px rgba(225,62,247,.1); }.el-form-item :deep(.el-input__inner) { color: #392d3e; caret-color: var(--df-primary-600); }.el-form-item :deep(.el-input__inner:-webkit-autofill), .el-form-item :deep(.el-input__inner:-webkit-autofill:hover), .el-form-item :deep(.el-input__inner:-webkit-autofill:focus) { -webkit-text-fill-color: #392d3e; -webkit-box-shadow: 0 0 0 1000px rgba(255,255,255,.82) inset; box-shadow: 0 0 0 1000px rgba(255,255,255,.82) inset; transition: background-color 9999s ease-out 0s; }
-@media (max-width: 820px) { .auth-page { display: block; overflow: auto; background: linear-gradient(160deg, #32174e 0%, #6f328c 35%, #f6eef7 72%); }.brand-panel { min-height: 290px; padding: 28px 24px 34px; }.brand-watermark { right: -6%; bottom: 12%; height: 86px; width: auto; }.brand-copy { margin: 54px 0 0; }.brand-copy h1 { font-size: 36px; }.brand-copy p:not(.eyebrow), .brand-foot { display: none; }.brand-panel::after { right: -15px; bottom: -30px; font-size: 170px; }.form-panel { padding: 0 18px 40px; }.form-wrap { margin-top: -1px; padding: 30px 24px 34px; border-radius: 0 0 18px 18px; background: rgba(255,255,255,.9); }.login-context { margin-top: 20px; } }
+@keyframes wave-drift { from { margin-left: -2%; } to { margin-left: 4%; } }
+@media (prefers-reduced-motion: reduce) { .wave-layer span { animation: none; } }
+@media (max-width: 820px) { .auth-page { display: block; overflow: auto; background: linear-gradient(160deg, #32174e 0%, #6f328c 35%, #f6eef7 72%); }.brand-panel { min-height: 290px; padding: 28px 24px 34px; }.brand-copy { margin: 54px 0 0; }.brand-copy h1 { font-size: 36px; }.brand-copy p:not(.eyebrow), .brand-foot { display: none; }.brand-panel::after { right: -15px; bottom: -30px; font-size: 170px; }.wave-layer { height: 28%; }.form-panel { padding: 0 18px 40px; }.form-wrap { margin-top: -1px; padding: 30px 24px 34px; border-radius: 0 0 18px 18px; background: rgba(255,255,255,.9); }.login-context { margin-top: 20px; } }
 @media (max-width: 420px) { .brand-panel { min-height: 270px; }.brand-copy { margin-top: 42px; }.brand-copy h1 { font-size: 32px; }.form-panel { padding-inline: 12px; }.form-wrap { padding-inline: 20px; } }
 </style>
