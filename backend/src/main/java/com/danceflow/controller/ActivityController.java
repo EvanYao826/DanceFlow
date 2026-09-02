@@ -4,6 +4,9 @@ import com.danceflow.common.PageResult;
 import com.danceflow.common.Result;
 import com.danceflow.dto.ActivityRequest;
 import com.danceflow.dto.ActivityStatusRequest;
+import com.danceflow.dto.ActivityApplyRequest;
+import com.danceflow.service.ActivityApplyService;
+import com.danceflow.vo.ActivityApplyVO;
 import com.danceflow.security.AuthUser;
 import com.danceflow.service.ActivityService;
 import com.danceflow.vo.ActivityVO;
@@ -15,8 +18,9 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api")
 public class ActivityController {
     private final ActivityService activityService;
+    private final ActivityApplyService applyService;
 
-    public ActivityController(ActivityService activityService) { this.activityService = activityService; }
+    public ActivityController(ActivityService activityService, ActivityApplyService applyService) { this.activityService = activityService; this.applyService = applyService; }
 
     @GetMapping("/activities")
     public Result<PageResult<ActivityVO>> page(@RequestParam(defaultValue = "1") long page, @RequestParam(defaultValue = "10") long pageSize) {
@@ -24,7 +28,25 @@ public class ActivityController {
     }
 
     @GetMapping("/activities/{id}")
-    public Result<ActivityVO> detail(@PathVariable Long id) { return Result.ok(activityService.detail(id, true)); }
+    public Result<ActivityVO> detail(Authentication authentication, @PathVariable Long id) {
+        Long userId = authentication != null && authentication.getPrincipal() instanceof AuthUser user ? user.id() : null;
+        return Result.ok(activityService.detail(id, true, userId));
+    }
+
+    @PostMapping("/activities/{id}/apply")
+    public Result<ActivityApplyVO> apply(Authentication authentication, @PathVariable Long id, @Valid @RequestBody(required = false) ActivityApplyRequest request) {
+        return Result.ok(applyService.apply(((AuthUser) authentication.getPrincipal()).id(), id, request));
+    }
+
+    @DeleteMapping("/activities/{id}/apply")
+    public Result<Void> cancel(Authentication authentication, @PathVariable Long id) {
+        applyService.cancel(((AuthUser) authentication.getPrincipal()).id(), id); return Result.ok();
+    }
+
+    @GetMapping("/activities/my")
+    public Result<java.util.List<ActivityApplyVO>> mine(Authentication authentication) {
+        return Result.ok(applyService.mine(((AuthUser) authentication.getPrincipal()).id()));
+    }
 
     @PostMapping("/admin/activities")
     public Result<ActivityVO> create(Authentication authentication, @Valid @RequestBody ActivityRequest request) {

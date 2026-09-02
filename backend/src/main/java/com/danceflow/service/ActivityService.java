@@ -10,6 +10,7 @@ import com.danceflow.entity.Activity;
 import com.danceflow.entity.User;
 import com.danceflow.exception.BusinessException;
 import com.danceflow.mapper.ActivityMapper;
+import com.danceflow.mapper.ActivityApplyMapper;
 import com.danceflow.mapper.UserMapper;
 import com.danceflow.vo.ActivityVO;
 import org.springframework.stereotype.Service;
@@ -22,10 +23,12 @@ import java.util.Set;
 public class ActivityService {
     private final ActivityMapper activityMapper;
     private final UserMapper userMapper;
+    private final ActivityApplyMapper applyMapper;
 
-    public ActivityService(ActivityMapper activityMapper, UserMapper userMapper) {
+    public ActivityService(ActivityMapper activityMapper, UserMapper userMapper, ActivityApplyMapper applyMapper) {
         this.activityMapper = activityMapper;
         this.userMapper = userMapper;
+        this.applyMapper = applyMapper;
     }
 
     public PageResult<ActivityVO> publicPage(long page, long pageSize) {
@@ -35,9 +38,13 @@ public class ActivityService {
     }
 
     public ActivityVO detail(Long id, boolean publicOnly) {
+        return detail(id, publicOnly, null);
+    }
+
+    public ActivityVO detail(Long id, boolean publicOnly, Long userId) {
         Activity activity = required(id);
         if (publicOnly && !"PUBLISHED".equals(activity.getStatus())) throw new BusinessException(ResultCode.NOT_FOUND.getCode(), "活动不存在");
-        return toVO(activity);
+        return toVO(activity, userId);
     }
 
     @Transactional
@@ -86,8 +93,21 @@ public class ActivityService {
     }
 
     private ActivityVO toVO(Activity activity) {
+        return toVO(activity, null);
+    }
+
+    private ActivityVO toVO(Activity activity, Long userId) {
         User publisher = userMapper.selectById(activity.getPublisherId());
-        return ActivityVO.from(activity, publisher == null ? "未知用户" : publisher.getNickname());
+        String name = publisher == null ? "未知用户" : publisher.getNickname();
+        long count = applyMapper.selectCount(new LambdaQueryWrapper<com.danceflow.entity.ActivityApply>()
+                .eq(com.danceflow.entity.ActivityApply::getActivityId, activity.getId())
+                .eq(com.danceflow.entity.ActivityApply::getApplyStatus, "APPLIED"));
+        com.danceflow.entity.ActivityApply current = userId == null ? null : applyMapper.selectOne(new LambdaQueryWrapper<com.danceflow.entity.ActivityApply>()
+                .eq(com.danceflow.entity.ActivityApply::getActivityId, activity.getId()).eq(com.danceflow.entity.ActivityApply::getUserId, userId).last("LIMIT 1"));
+        return new ActivityVO(activity.getId(), activity.getTitle(), activity.getCoverUrl(), activity.getDescription(), activity.getActivityType(),
+                activity.getStartTime(), activity.getEndTime(), activity.getLocation(), activity.getCapacity(), activity.getApplyDeadline(),
+                activity.getStatus(), activity.getPublisherId(), name, current != null && "APPLIED".equals(current.getApplyStatus()), count,
+                Math.max(activity.getCapacity() - (int) count, 0), current == null ? null : current.getApplyStatus());
     }
 
     private void copy(Activity activity, ActivityRequest request) {

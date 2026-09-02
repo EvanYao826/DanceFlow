@@ -96,3 +96,19 @@ CREATE TABLE IF NOT EXISTS activity (
     KEY idx_activity_public (status, start_time),
     CONSTRAINT fk_activity_publisher FOREIGN KEY (publisher_id) REFERENCES sys_user(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS activity_apply (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    activity_id BIGINT NOT NULL,
+    user_id BIGINT NOT NULL,
+    apply_status VARCHAR(20) NOT NULL DEFAULT 'APPLIED',
+    remark VARCHAR(500) NULL,
+    apply_time DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    is_deleted TINYINT NOT NULL DEFAULT 0,
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    UNIQUE KEY uk_activity_apply_user (activity_id, user_id),
+    KEY idx_activity_apply_activity (activity_id, apply_status),
+    CONSTRAINT fk_activity_apply_activity FOREIGN KEY (activity_id) REFERENCES activity(id),
+    CONSTRAINT fk_activity_apply_user FOREIGN KEY (user_id) REFERENCES sys_user(id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
