@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { reactive } from 'vue'
+import { computed, reactive } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import BrandLogo from '@/components/BrandLogo.vue'
@@ -9,14 +9,14 @@ const router = useRouter()
 const route = useRoute()
 const auth = useAuthStore()
 const form = reactive({ username: '', password: '' })
-const isAdminLogin = route.query.redirect?.toString().startsWith('/admin') || route.query.admin === '1'
+const isAdminLogin = computed(() => route.query.redirect?.toString().startsWith('/admin') || route.query.admin === '1')
 
 async function submit() {
   try {
     await auth.login(form.username, form.password)
     ElMessage.success('登录成功')
     const redirect = route.query.redirect?.toString()
-    await router.push(redirect || (auth.isAdmin && isAdminLogin ? '/admin' : '/'))
+    await router.push(redirect || (auth.isAdmin && isAdminLogin.value ? '/admin' : '/'))
   } catch {
     // 请求拦截器负责展示后端错误。
   }
