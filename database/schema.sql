@@ -59,3 +59,20 @@ CREATE TABLE IF NOT EXISTS sys_role_permission (
     CONSTRAINT fk_role_permission_role FOREIGN KEY (role_id) REFERENCES sys_role(id),
     CONSTRAINT fk_role_permission_permission FOREIGN KEY (permission_id) REFERENCES sys_permission(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS club_member (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    user_id BIGINT NOT NULL,
+    dance_type VARCHAR(50) NULL,
+    skill_level VARCHAR(30) NULL,
+    join_date DATE NULL,
+    member_status VARCHAR(20) NOT NULL DEFAULT 'PENDING',
+    bio VARCHAR(1000) NULL,
+    audit_reason VARCHAR(500) NULL,
+    is_deleted TINYINT NOT NULL DEFAULT 0,
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    UNIQUE KEY uk_club_member_user (user_id),
+    KEY idx_club_member_status (member_status),
+    CONSTRAINT fk_club_member_user FOREIGN KEY (user_id) REFERENCES sys_user(id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
