@@ -74,4 +74,4 @@ npm run dev
 - 每个阶段以 `PlanDocs/` 对应文档为任务边界，验收条件全部满足后才进入下一阶段。
 - 提交信息使用 `feat` / `fix` / `refactor` / `test` / `docs` 前缀。
 
-详细约定见 [PlanDocs/00-开发总览与执行规范.md](PlanDocs/00-开发总览与执行规范.md)，整体设计见 [DanceFlow项目开发文档.md](DanceFlow项目开发文档.md)。
+详细约定见 [PlanDocs/00-开发总览与执行规范.md](PlanDocs/00-开发总览与执行规范.md)，整体设计见 [PlanDocs/DanceFlow项目开发文档.md](PlanDocs/DanceFlow项目开发文档.md)。
