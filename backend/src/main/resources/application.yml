@@ -1,0 +1,39 @@
+spring:
+  application:
+    name: danceflow
+  profiles:
+    active: dev
+  jackson:
+    time-zone: Asia/Shanghai
+    date-format: yyyy-MM-dd HH:mm:ss
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 100MB
+
+mybatis-plus:
+  mapper-locations: classpath*:mapper/**/*.xml
+  type-aliases-package: com.danceflow.entity
+  configuration:
+    map-underscore-to-camel-case: true
+  global-config:
+    banner: false
+    db-config:
+      logic-delete-field: isDeleted
+      logic-delete-value: 1
+      logic-not-delete-value: 0
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+
+# 业务自定义配置（从阶段 1 起逐步启用）
+danceflow:
+  jwt:
+    # 生产环境必须通过环境变量覆盖
+    secret: ${JWT_SECRET:dev-only-danceflow-jwt-secret-change-me}
+    expire-hours: 24
+  upload:
+    dir: ${UPLOAD_DIR:./uploads}
