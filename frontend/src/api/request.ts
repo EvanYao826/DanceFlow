@@ -51,7 +51,7 @@ request.interceptors.response.use(
   (error) => {
     const status = error.response?.status
     if (status === 401) {
-      // 阶段 1 接入路由守卫后在此跳转登录页
+      if (location.pathname !== '/login') location.href = `/login?redirect=${encodeURIComponent(location.pathname)}`
       ElMessage.error('未登录或登录已过期')
     } else if (status === 403) {
       ElMessage.error('没有访问权限')
