@@ -37,6 +37,12 @@ public class ActivityService {
         return new PageResult<>(result.getRecords().stream().map(this::toVO).toList(), result.getTotal(), result.getCurrent(), result.getSize());
     }
 
+    public PageResult<ActivityVO> adminPage(long page, long pageSize) {
+        Page<Activity> result = activityMapper.selectPage(new Page<>(Math.max(page, 1), Math.min(Math.max(pageSize, 1), 100)),
+                new LambdaQueryWrapper<Activity>().orderByDesc(Activity::getCreatedAt));
+        return new PageResult<>(result.getRecords().stream().map(this::toVO).toList(), result.getTotal(), result.getCurrent(), result.getSize());
+    }
+
     public ActivityVO detail(Long id, boolean publicOnly) {
         return detail(id, publicOnly, null);
     }

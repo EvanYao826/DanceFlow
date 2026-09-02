@@ -53,6 +53,11 @@ public class ActivityController {
         return Result.ok(applyService.forActivity(id));
     }
 
+    @GetMapping("/admin/activities")
+    public Result<PageResult<ActivityVO>> adminPage(@RequestParam(defaultValue = "1") long page, @RequestParam(defaultValue = "10") long pageSize) {
+        return Result.ok(activityService.adminPage(page, pageSize));
+    }
+
     @PostMapping("/admin/activities")
     public Result<ActivityVO> create(Authentication authentication, @Valid @RequestBody ActivityRequest request) {
         return Result.ok(activityService.create(((AuthUser) authentication.getPrincipal()).id(), request));

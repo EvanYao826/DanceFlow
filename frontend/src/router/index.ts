@@ -29,6 +29,8 @@ const router = createRouter({
       component: () => import('@/views/AdminHomeView.vue'),
       meta: { title: '管理端', requiresAuth: true, requiresAdmin: true },
     },
+    { path: '/admin/members', name: 'admin-members', component: () => import('@/views/AdminMembersView.vue'), meta: { title: '成员审核', requiresAuth: true, requiresAdmin: true } },
+    { path: '/admin/activities', name: 'admin-activities', component: () => import('@/views/AdminActivitiesView.vue'), meta: { title: '活动管理', requiresAuth: true, requiresAdmin: true } },
     {
       path: '/activities',
       name: 'activities',
