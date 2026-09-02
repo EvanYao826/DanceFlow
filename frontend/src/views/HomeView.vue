@@ -1,5 +1,6 @@
 <script setup lang="ts">
-// 占位首页，阶段 1 起按 PlanDocs/01 逐步替换为真实首页
+import BrandLogo from '@/components/BrandLogo.vue'
+
 interface PaletteColor {
   step: number
   hex: string
@@ -23,9 +24,17 @@ const palette: PaletteColor[] = [
 
 <template>
   <div class="home">
+    <section class="banner">
+      <BrandLogo variant="white" :height="64" to="/" />
+      <p class="banner-sub">高校街舞社团综合服务平台</p>
+    </section>
+
     <el-card class="welcome-card" shadow="hover">
       <template #header>
-        <span class="title">DanceFlow · 高校街舞社团综合服务平台</span>
+        <div class="card-header">
+          <BrandLogo variant="purple" :height="26" />
+          <span class="title">DanceFlow · FlowArtist 街舞社</span>
+        </div>
       </template>
       <el-space direction="vertical" alignment="flex-start" :size="12">
         <el-text>项目骨架已就绪：Spring Boot 3 后端 + Vue 3 前端，开发计划见 PlanDocs 目录。</el-text>
@@ -57,13 +66,40 @@ const palette: PaletteColor[] = [
 <style scoped>
 .home {
   display: flex;
-  justify-content: center;
-  padding: 48px 16px;
+  flex-direction: column;
+  align-items: center;
+  padding: 32px 16px 48px;
+}
+
+.banner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  max-width: 960px;
+  margin-bottom: 24px;
+  padding: 40px 16px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, var(--df-primary-900), var(--df-primary-950) 70%);
+}
+
+.banner-sub {
+  margin: 0;
+  color: var(--df-primary-100);
+  font-size: 15px;
+  letter-spacing: 2px;
 }
 
 .welcome-card {
   width: 100%;
   max-width: 720px;
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
 
 .title {
