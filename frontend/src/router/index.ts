@@ -30,6 +30,12 @@ const router = createRouter({
       meta: { title: '管理端', requiresAuth: true, requiresAdmin: true },
     },
     {
+      path: '/club',
+      name: 'club',
+      component: () => import('@/views/ClubView.vue'),
+      meta: { title: '社团中心' },
+    },
+    {
       path: '/',
       name: 'home',
       component: () => import('@/views/HomeView.vue'),
