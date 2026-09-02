@@ -76,3 +76,23 @@ CREATE TABLE IF NOT EXISTS club_member (
     KEY idx_club_member_status (member_status),
     CONSTRAINT fk_club_member_user FOREIGN KEY (user_id) REFERENCES sys_user(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS activity (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    title VARCHAR(100) NOT NULL,
+    cover_url VARCHAR(500) NULL,
+    description TEXT NULL,
+    activity_type VARCHAR(30) NOT NULL,
+    start_time DATETIME NOT NULL,
+    end_time DATETIME NOT NULL,
+    location VARCHAR(200) NOT NULL,
+    capacity INT NOT NULL,
+    apply_deadline DATETIME NOT NULL,
+    status VARCHAR(20) NOT NULL DEFAULT 'DRAFT',
+    publisher_id BIGINT NOT NULL,
+    is_deleted TINYINT NOT NULL DEFAULT 0,
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    KEY idx_activity_public (status, start_time),
+    CONSTRAINT fk_activity_publisher FOREIGN KEY (publisher_id) REFERENCES sys_user(id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
