@@ -21,9 +21,9 @@ SELECT r.id, p.id FROM sys_role r CROSS JOIN sys_permission p WHERE r.role_code 
 -- 演示账号：密码均为 password，生产环境禁止使用这些账号。
 INSERT INTO sys_user (username, password, nickname, email, role, status)
 VALUES
-    ('admin_demo', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy', '社团管理员', 'admin@danceflow.local', 'ADMIN', 1),
-    ('dance_demo', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy', '街舞同学', 'dance@danceflow.local', 'USER', 1),
-    ('member_demo', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy', 'Flow 舞者', 'member@danceflow.local', 'USER', 1)
+    ('admin_demo', '$2a$10$wj6vENfaaG4cudegsK9ome/5nSmb.bSTOYpApRBUTaUDRusc8Iu7a', '社团管理员', 'admin@danceflow.local', 'ADMIN', 1),
+    ('dance_demo', '$2a$10$wj6vENfaaG4cudegsK9ome/5nSmb.bSTOYpApRBUTaUDRusc8Iu7a', '街舞同学', 'dance@danceflow.local', 'USER', 1),
+    ('member_demo', '$2a$10$wj6vENfaaG4cudegsK9ome/5nSmb.bSTOYpApRBUTaUDRusc8Iu7a', 'Flow 舞者', 'member@danceflow.local', 'USER', 1)
 ON DUPLICATE KEY UPDATE nickname = VALUES(nickname), email = VALUES(email), role = VALUES(role), status = 1;
 
 INSERT IGNORE INTO sys_user_role (user_id, role_id)
