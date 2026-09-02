@@ -30,7 +30,7 @@ const router = createRouter({
       meta: { title: '管理端', requiresAuth: true, requiresAdmin: true },
       children: [
         { path: 'dashboard', name: 'admin', component: () => import('@/views/AdminHomeView.vue'), meta: { title: '工作台' } },
-        { path: 'members', name: 'admin-members', component: () => import('@/views/AdminMembersView.vue'), meta: { title: '成员审核' } },
+        { path: 'members', name: 'admin-members', component: () => import('@/views/MemberManagementView.vue'), meta: { title: '成员审核' } },
         { path: 'activities', name: 'admin-activities', component: () => import('@/views/AdminActivitiesView.vue'), meta: { title: '活动管理' } },
       ],
     },
