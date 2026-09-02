@@ -14,6 +14,12 @@ const isAdminLogin = computed(() => route.query.redirect?.toString().startsWith(
 async function submit() {
   try {
     await auth.login(form.username, form.password)
+    if (isAdminLogin.value !== auth.isAdmin) {
+      const message = isAdminLogin.value ? '该账号不是管理员，请使用用户端登录' : '管理员账号请从管理端入口登录'
+      auth.logout()
+      ElMessage.error(message)
+      return
+    }
     ElMessage.success('登录成功')
     const redirect = route.query.redirect?.toString()
     await router.push(redirect || (auth.isAdmin && isAdminLogin.value ? '/admin' : '/'))
