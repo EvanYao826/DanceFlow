@@ -8,7 +8,7 @@ const route = useRoute()
 const router = useRouter()
 const auth = useAuthStore()
 const items = [
-  { label: '工作台', path: '/admin' },
+  { label: '工作台', path: '/admin/dashboard' },
   { label: '成员审核', path: '/admin/members' },
   { label: '活动管理', path: '/admin/activities' },
 ]
