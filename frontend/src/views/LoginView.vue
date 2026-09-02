@@ -32,7 +32,8 @@ async function submit() {
 <template>
   <main class="auth-page">
     <section class="brand-panel">
-      <div class="brand-top"><BrandLogo variant="white" :height="42" to="/" /><span class="brand-mark">DF / 01</span></div>
+      <BrandLogo class="brand-watermark" variant="white" :height="112" />
+      <div class="brand-top"><span class="brand-mark">DF / 01</span></div>
       <div class="brand-copy">
         <p class="eyebrow">{{ isAdminLogin ? 'FLOWARTIST ADMIN' : 'FLOWARTIST COMMUNITY' }}</p>
         <h1 v-if="isAdminLogin"><span>管理社团</span><span>每一次跃动</span></h1>
@@ -44,7 +45,6 @@ async function submit() {
     </section>
     <section class="form-panel">
       <div class="form-wrap">
-        <div class="mobile-brand"><BrandLogo variant="purple" :height="34" /></div>
         <div class="form-heading">
           <span class="portal-badge"><i></i>{{ isAdminLogin ? '管理端' : '用户端' }}</span>
           <p class="login-context">{{ isAdminLogin ? 'ADMIN PORTAL' : 'WELCOME BACK' }}</p>
@@ -61,7 +61,6 @@ async function submit() {
           <el-link v-else type="primary" @click="router.push('/login')">用户端登录</el-link>
           <el-link v-if="!isAdminLogin" @click="router.push({ name: 'login', query: { admin: '1', redirect: '/admin' } })">管理员入口</el-link>
         </div>
-        <el-link class="home-link" @click="router.push('/')">返回用户端首页</el-link>
       </div>
     </section>
   </main>
@@ -74,6 +73,7 @@ async function submit() {
 .brand-panel { display: flex; flex-direction: column; padding: 42px clamp(36px, 6vw, 92px); color: #fff; }
 .brand-panel::after { content: 'DF'; position: absolute; right: -28px; bottom: 68px; color: rgba(255,255,255,.08); font-size: clamp(180px, 20vw, 290px); font-weight: 800; line-height: 1; }
 .brand-top, .brand-copy, .brand-foot { position: relative; z-index: 1; }
+.brand-watermark { position: absolute; z-index: 0; right: 8%; bottom: 15%; opacity: .12; transform: rotate(-9deg); filter: saturate(.7); }
 .brand-top { display: flex; align-items: center; justify-content: space-between; }
 .brand-mark { color: rgba(255,255,255,.56); font-size: 11px; letter-spacing: 1.5px; }
 .brand-copy { max-width: 430px; margin: auto 0; }
@@ -86,11 +86,10 @@ async function submit() {
 .brand-foot { display: flex; gap: 18px; color: rgba(255,255,255,.54); font-size: 12px; }.brand-foot span + span { padding-left: 18px; border-left: 1px solid rgba(255,255,255,.2); }
 .form-panel { display: grid; place-items: center; padding: 56px clamp(28px, 7vw, 105px); }
 .form-wrap { width: min(100%, 430px); padding: clamp(28px, 4vw, 44px); border: 1px solid rgba(255,255,255,.7); border-radius: 18px; background: rgba(255,255,255,.78); box-shadow: 0 24px 70px rgba(62, 23, 78, .2); backdrop-filter: blur(22px); }
-.mobile-brand { display: none; }
 .form-heading { position: relative; }.portal-badge { display: inline-flex; align-items: center; gap: 8px; padding: 7px 11px; border-radius: 999px; background: rgba(225,62,247,.1); color: var(--df-primary-700); font-size: 12px; font-weight: 600; }.portal-badge i { width: 6px; height: 6px; border-radius: 50%; background: var(--df-primary-500); }
 .login-context { margin: 27px 0 10px; color: var(--df-primary-600); font-size: 11px; letter-spacing: 2px; font-weight: 700; }.form-wrap h2 { margin: 0; color: var(--df-primary-950); font-size: 30px; line-height: 1.3; }.form-subtitle { margin: 9px 0 30px; color: #766b7b; font-size: 14px; }
-.el-form { text-align: left; }.form-button { width: 100%; height: 46px; margin: 7px 0 20px; border: 0; border-radius: 9px; background: linear-gradient(100deg, #b820d5, #e13ef7); box-shadow: 0 10px 22px rgba(201,30,219,.22); font-weight: 600; }.form-links { display: flex; justify-content: space-between; align-items: center; }.home-link { display: block; margin-top: 36px; text-align: center; color: #857b88; }
-:deep(.el-form-item) { margin-bottom: 19px; }.el-form-item :deep(.el-form-item__label) { margin-bottom: 7px; color: #4f4454; font-size: 13px; font-weight: 600; }.el-form-item :deep(.el-input__wrapper) { min-height: 44px; padding: 1px 14px; border: 1px solid rgba(105,81,111,.16); border-radius: 9px; background: rgba(255,255,255,.82); box-shadow: none; }.el-form-item :deep(.el-input__wrapper.is-focus) { border-color: var(--df-primary-400); box-shadow: 0 0 0 3px rgba(225,62,247,.1); }.el-form-item :deep(.el-input__inner) { color: #392d3e; }
-@media (max-width: 820px) { .auth-page { display: block; overflow: auto; background: linear-gradient(160deg, #32174e 0%, #6f328c 35%, #f6eef7 72%); }.brand-panel { min-height: 290px; padding: 28px 24px 34px; }.brand-copy { margin: 54px 0 0; }.brand-copy h1 { font-size: 36px; }.brand-copy p:not(.eyebrow), .brand-foot { display: none; }.brand-panel::after { right: -15px; bottom: -30px; font-size: 170px; }.form-panel { padding: 0 18px 40px; }.form-wrap { margin-top: -1px; padding: 30px 24px 34px; border-radius: 0 0 18px 18px; background: rgba(255,255,255,.9); }.login-context { margin-top: 20px; }.home-link { margin-top: 28px; } }
+.el-form { text-align: left; }.form-button { width: 100%; height: 46px; margin: 7px 0 20px; border: 0; border-radius: 9px; background: linear-gradient(100deg, #b820d5, #e13ef7); box-shadow: 0 10px 22px rgba(201,30,219,.22); font-weight: 600; }.form-links { display: flex; justify-content: space-between; align-items: center; }
+:deep(.el-form-item) { margin-bottom: 19px; }.el-form-item :deep(.el-form-item__label) { margin-bottom: 7px; color: #4f4454; font-size: 13px; font-weight: 600; }.el-form-item :deep(.el-input__wrapper) { min-height: 44px; padding: 1px 14px; border: 1px solid rgba(105,81,111,.16); border-radius: 9px; background: rgba(255,255,255,.82); box-shadow: none; transition: border-color .2s, box-shadow .2s; }.el-form-item :deep(.el-input__wrapper:hover) { border-color: rgba(201,30,219,.45); }.el-form-item :deep(.el-input__wrapper.is-focus) { border-color: var(--df-primary-400); box-shadow: 0 0 0 3px rgba(225,62,247,.1); }.el-form-item :deep(.el-input__inner) { color: #392d3e; caret-color: var(--df-primary-600); }.el-form-item :deep(.el-input__inner:-webkit-autofill), .el-form-item :deep(.el-input__inner:-webkit-autofill:hover), .el-form-item :deep(.el-input__inner:-webkit-autofill:focus) { -webkit-text-fill-color: #392d3e; -webkit-box-shadow: 0 0 0 1000px rgba(255,255,255,.82) inset; box-shadow: 0 0 0 1000px rgba(255,255,255,.82) inset; transition: background-color 9999s ease-out 0s; }
+@media (max-width: 820px) { .auth-page { display: block; overflow: auto; background: linear-gradient(160deg, #32174e 0%, #6f328c 35%, #f6eef7 72%); }.brand-panel { min-height: 290px; padding: 28px 24px 34px; }.brand-watermark { right: -6%; bottom: 12%; height: 86px; width: auto; }.brand-copy { margin: 54px 0 0; }.brand-copy h1 { font-size: 36px; }.brand-copy p:not(.eyebrow), .brand-foot { display: none; }.brand-panel::after { right: -15px; bottom: -30px; font-size: 170px; }.form-panel { padding: 0 18px 40px; }.form-wrap { margin-top: -1px; padding: 30px 24px 34px; border-radius: 0 0 18px 18px; background: rgba(255,255,255,.9); }.login-context { margin-top: 20px; } }
 @media (max-width: 420px) { .brand-panel { min-height: 270px; }.brand-copy { margin-top: 42px; }.brand-copy h1 { font-size: 32px; }.form-panel { padding-inline: 12px; }.form-wrap { padding-inline: 20px; } }
 </style>
