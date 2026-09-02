@@ -21,6 +21,7 @@ onMounted(async () => {
 
 async function submit() {
   if (!auth.isLoggedIn) { await router.push({ name: 'login', query: { redirect: '/club' } }); return }
+  if (!form.danceType.trim() || !form.skillLevel) { ElMessage.error('请填写舞种和技术等级'); return }
   submitting.value = true
   try { member.value = (await applyMember(form)).data; ElMessage.success('入社申请已提交') } catch { /* 请求拦截器展示错误。 */ } finally { submitting.value = false }
 }
