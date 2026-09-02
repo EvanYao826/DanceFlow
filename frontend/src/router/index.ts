@@ -30,6 +30,24 @@ const router = createRouter({
       meta: { title: '管理端', requiresAuth: true, requiresAdmin: true },
     },
     {
+      path: '/activities',
+      name: 'activities',
+      component: () => import('@/views/ActivitiesView.vue'),
+      meta: { title: '活动列表' },
+    },
+    {
+      path: '/activities/:id',
+      name: 'activity-detail',
+      component: () => import('@/views/ActivityDetailView.vue'),
+      meta: { title: '活动详情' },
+    },
+    {
+      path: '/profile/applications',
+      name: 'my-applications',
+      component: () => import('@/views/MyApplicationsView.vue'),
+      meta: { title: '我的报名', requiresAuth: true },
+    },
+    {
       path: '/club',
       name: 'club',
       component: () => import('@/views/ClubView.vue'),
