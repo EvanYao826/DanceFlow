@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
 import { getMyApplications, type ActivityApply } from '@/api/activities'
-import UserTopbar from '@/components/UserTopbar.vue'
 
 const records = ref<ActivityApply[]>([]); const loading = ref(true)
 onMounted(async () => { try { records.value = (await getMyApplications()).data } finally { loading.value = false } })

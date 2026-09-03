@@ -2,7 +2,6 @@
 import { onMounted, onUnmounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
-import UserTopbar from '@/components/UserTopbar.vue'
 import { getLesson, saveLessonProgress, type LessonLearning } from '@/api/courses'
 const route = useRoute(); const router = useRouter(); const data = ref<LessonLearning | null>(null); const loading = ref(true); const saving = ref(false); const player = ref<HTMLVideoElement>(); const progress = ref(0); let timer: ReturnType<typeof setInterval> | undefined
 onMounted(async () => { try { data.value = (await getLesson(String(route.params.id), String(route.params.lessonId))).data; progress.value = data.value.lesson.progressSeconds || 0; timer = setInterval(saveProgress, 15000) } finally { loading.value = false } })

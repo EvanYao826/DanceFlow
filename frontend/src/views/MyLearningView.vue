@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
-import UserTopbar from '@/components/UserTopbar.vue'
 import { getMyLearning, type LearningCourse } from '@/api/courses'
 const router = useRouter(); const records = ref<LearningCourse[]>([]); const loading = ref(true)
 onMounted(async () => { try { records.value = (await getMyLearning()).data } finally { loading.value = false } })

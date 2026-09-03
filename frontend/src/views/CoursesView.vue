@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
-import UserTopbar from '@/components/UserTopbar.vue'
 import { getCourses, type Course } from '@/api/courses'
 
 const records = ref<Course[]>([]); const total = ref(0); const page = ref(1); const loading = ref(false); const keyword = ref(''); const danceType = ref(''); const difficulty = ref('')

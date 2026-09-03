@@ -4,7 +4,6 @@ import { useRoute, useRouter } from 'vue-router'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { applyActivity, cancelActivity, getActivity, type Activity } from '@/api/activities'
 import { useAuthStore } from '@/stores/auth'
-import UserTopbar from '@/components/UserTopbar.vue'
 
 const route = useRoute(); const router = useRouter(); const auth = useAuthStore(); const activity = ref<Activity | null>(null); const loading = ref(true); const actionLoading = ref(false)
 onMounted(async () => { try { activity.value = (await getActivity(String(route.params.id))).data } finally { loading.value = false } })

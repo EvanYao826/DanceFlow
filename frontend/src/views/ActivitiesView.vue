@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue'
 import { getActivities, type Activity } from '@/api/activities'
-import UserTopbar from '@/components/UserTopbar.vue'
 
 const records = ref<Activity[]>([])
 const total = ref(0)

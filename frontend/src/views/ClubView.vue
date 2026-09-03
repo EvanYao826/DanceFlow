@@ -2,7 +2,6 @@
 import { onMounted, reactive, ref } from 'vue'
 import { ElMessage } from 'element-plus'
 import { useRouter } from 'vue-router'
-import UserTopbar from '@/components/UserTopbar.vue'
 import { applyMember, getMyMember, type MemberProfile } from '@/api/club'
 import { useAuthStore } from '@/stores/auth'
 

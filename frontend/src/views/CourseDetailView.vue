@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import UserTopbar from '@/components/UserTopbar.vue'
 import { getCourse, type Course } from '@/api/courses'
 import { useAuthStore } from '@/stores/auth'
 const route = useRoute(); const router = useRouter(); const auth = useAuthStore(); const course = ref<Course | null>(null); const loading = ref(true)
