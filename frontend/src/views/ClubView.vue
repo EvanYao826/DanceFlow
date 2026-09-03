@@ -31,7 +31,7 @@ const statusText: Record<string, string> = { PENDING: '审核中', ACTIVE: '已�
 
 <template>
   <main class="club-page">
-    <header class="topbar"><BrandLogo variant="purple" :height="34" to="/" /><nav><el-link @click="router.push('/activities')">活动</el-link><el-link v-if="auth.isLoggedIn" @click="auth.logout(); router.push('/login')">退出登录</el-link><el-link v-else @click="router.push('/login')">登录</el-link></nav></header>
+    <header class="topbar"><BrandLogo variant="purple" :height="34" to="/" /><nav><el-link @click="router.push('/activities')">活动</el-link><el-link @click="router.push('/courses')">课程</el-link><el-link v-if="auth.isLoggedIn" @click="router.push('/courses/my')">我的学习</el-link><el-link v-if="auth.isLoggedIn" @click="auth.logout(); router.push('/login')">退出登录</el-link><el-link v-else @click="router.push('/login')">登录</el-link></nav></header>
     <section class="club-hero"><p class="eyebrow">FLOWARTIST · CLUB</p><h1>一起跳，一起成长</h1><p>在训练、活动和舞台之间，找到属于你的节奏。</p></section>
     <section class="club-content">
       <div class="intro"><h2>关于社团</h2><p>FlowArtist 街舞社面向高校街舞爱好者，提供日常训练、舞种交流和社团活动，让每一次练习都能被记录、被看见。</p><div class="stats"><span><b>6</b> 常设舞种</span><span><b>24</b> 年度活动</span><span><b>∞</b> 舞者连接</span></div></div>
