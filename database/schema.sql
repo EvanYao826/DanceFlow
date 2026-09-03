@@ -112,3 +112,54 @@ CREATE TABLE IF NOT EXISTS activity_apply (
     CONSTRAINT fk_activity_apply_activity FOREIGN KEY (activity_id) REFERENCES activity(id),
     CONSTRAINT fk_activity_apply_user FOREIGN KEY (user_id) REFERENCES sys_user(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS course (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    title VARCHAR(100) NOT NULL,
+    cover_url VARCHAR(500) NULL,
+    dance_type VARCHAR(50) NOT NULL,
+    difficulty VARCHAR(30) NOT NULL,
+    teacher_name VARCHAR(50) NOT NULL,
+    description TEXT NULL,
+    lesson_count INT NOT NULL DEFAULT 0,
+    status VARCHAR(20) NOT NULL DEFAULT 'DRAFT',
+    sort_no INT NOT NULL DEFAULT 0,
+    is_deleted TINYINT NOT NULL DEFAULT 0,
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    KEY idx_course_public (status, sort_no, created_at)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS course_lesson (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    course_id BIGINT NOT NULL,
+    title VARCHAR(100) NOT NULL,
+    video_url VARCHAR(500) NULL,
+    duration INT NOT NULL DEFAULT 0,
+    content TEXT NULL,
+    sort_no INT NOT NULL DEFAULT 0,
+    status VARCHAR(20) NOT NULL DEFAULT 'PUBLISHED',
+    is_deleted TINYINT NOT NULL DEFAULT 0,
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    KEY idx_course_lesson_order (course_id, status, sort_no),
+    CONSTRAINT fk_course_lesson_course FOREIGN KEY (course_id) REFERENCES course(id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS learning_record (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    user_id BIGINT NOT NULL,
+    course_id BIGINT NOT NULL,
+    lesson_id BIGINT NOT NULL,
+    progress_seconds INT NOT NULL DEFAULT 0,
+    completed TINYINT NOT NULL DEFAULT 0,
+    last_learn_time DATETIME NULL,
+    is_deleted TINYINT NOT NULL DEFAULT 0,
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    UNIQUE KEY uk_learning_record_user_lesson (user_id, lesson_id),
+    KEY idx_learning_record_course (user_id, course_id),
+    CONSTRAINT fk_learning_record_user FOREIGN KEY (user_id) REFERENCES sys_user(id),
+    CONSTRAINT fk_learning_record_course FOREIGN KEY (course_id) REFERENCES course(id),
+    CONSTRAINT fk_learning_record_lesson FOREIGN KEY (lesson_id) REFERENCES course_lesson(id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

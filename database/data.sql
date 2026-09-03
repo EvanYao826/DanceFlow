@@ -63,3 +63,50 @@ SELECT a.id, u.id, 'APPLIED', '期待参加训练。'
 FROM activity a CROSS JOIN sys_user u
 WHERE a.title = '周末 Hip-hop 基础训练' AND u.username = 'member_demo'
   AND NOT EXISTS (SELECT 1 FROM activity_apply x WHERE x.activity_id = a.id AND x.user_id = u.id);
+
+INSERT INTO course (title, cover_url, dance_type, difficulty, teacher_name, description, lesson_count, status, sort_no)
+SELECT 'Hip-hop 基础律动', NULL, 'Hip-hop', 'BEGINNER', 'Flow 老师', '从音乐律动、基础步伐开始，建立街舞入门必备的节奏感。', 4, 'PUBLISHED', 1
+WHERE NOT EXISTS (SELECT 1 FROM course c WHERE c.title = 'Hip-hop 基础律动');
+
+INSERT INTO course (title, cover_url, dance_type, difficulty, teacher_name, description, lesson_count, status, sort_no)
+SELECT 'Jazz Funk 编舞入门', NULL, 'Jazz Funk', 'INTERMEDIATE', 'Mia 老师', '学习身体线条、重心转换和一段完整的 Jazz Funk 编舞。', 3, 'PUBLISHED', 2
+WHERE NOT EXISTS (SELECT 1 FROM course c WHERE c.title = 'Jazz Funk 编舞入门');
+
+INSERT INTO course (title, cover_url, dance_type, difficulty, teacher_name, description, lesson_count, status, sort_no)
+SELECT '舞台表演训练', NULL, 'Performance', 'ADVANCED', 'Leo 老师', '针对舞台表现力和团队配合的进阶训练课程。', 2, 'DRAFT', 3
+WHERE NOT EXISTS (SELECT 1 FROM course c WHERE c.title = '舞台表演训练');
+
+INSERT INTO course_lesson (course_id, title, video_url, duration, content, sort_no, status)
+SELECT c.id, '认识节拍与律动', NULL, 420, '认识八拍结构，练习身体随音乐自然摆动。', 1, 'PUBLISHED'
+FROM course c WHERE c.title = 'Hip-hop 基础律动'
+  AND NOT EXISTS (SELECT 1 FROM course_lesson l WHERE l.course_id = c.id AND l.title = '认识节拍与律动');
+
+INSERT INTO course_lesson (course_id, title, video_url, duration, content, sort_no, status)
+SELECT c.id, '基础 Bounce', NULL, 510, '掌握膝盖弹动和身体重心，完成基础 Bounce 组合。', 2, 'PUBLISHED'
+FROM course c WHERE c.title = 'Hip-hop 基础律动'
+  AND NOT EXISTS (SELECT 1 FROM course_lesson l WHERE l.course_id = c.id AND l.title = '基础 Bounce');
+
+INSERT INTO course_lesson (course_id, title, video_url, duration, content, sort_no, status)
+SELECT c.id, 'Groove 步伐练习', NULL, 600, '结合左右移动和律动，练习基础 Groove 步伐。', 3, 'PUBLISHED'
+FROM course c WHERE c.title = 'Hip-hop 基础律动'
+  AND NOT EXISTS (SELECT 1 FROM course_lesson l WHERE l.course_id = c.id AND l.title = 'Groove 步伐练习');
+
+INSERT INTO course_lesson (course_id, title, video_url, duration, content, sort_no, status)
+SELECT c.id, '入门组合', NULL, 720, '将前面学到的内容串联成一段完整入门组合。', 4, 'PUBLISHED'
+FROM course c WHERE c.title = 'Hip-hop 基础律动'
+  AND NOT EXISTS (SELECT 1 FROM course_lesson l WHERE l.course_id = c.id AND l.title = '入门组合');
+
+INSERT INTO course_lesson (course_id, title, video_url, duration, content, sort_no, status)
+SELECT c.id, 'Jazz Funk 身体线条', NULL, 540, '练习手臂延展、胸腔控制和身体线条。', 1, 'PUBLISHED'
+FROM course c WHERE c.title = 'Jazz Funk 编舞入门'
+  AND NOT EXISTS (SELECT 1 FROM course_lesson l WHERE l.course_id = c.id AND l.title = 'Jazz Funk 身体线条');
+
+INSERT INTO course_lesson (course_id, title, video_url, duration, content, sort_no, status)
+SELECT c.id, '重心与方向', NULL, 600, '训练重心转换和舞蹈方向变化。', 2, 'PUBLISHED'
+FROM course c WHERE c.title = 'Jazz Funk 编舞入门'
+  AND NOT EXISTS (SELECT 1 FROM course_lesson l WHERE l.course_id = c.id AND l.title = '重心与方向');
+
+INSERT INTO course_lesson (course_id, title, video_url, duration, content, sort_no, status)
+SELECT c.id, '完整编舞练习', NULL, 780, '完成一段 Jazz Funk 入门编舞并进行复习。', 3, 'PUBLISHED'
+FROM course c WHERE c.title = 'Jazz Funk 编舞入门'
+  AND NOT EXISTS (SELECT 1 FROM course_lesson l WHERE l.course_id = c.id AND l.title = '完整编舞练习');
