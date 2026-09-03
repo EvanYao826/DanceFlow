@@ -110,3 +110,27 @@ INSERT INTO course_lesson (course_id, title, video_url, duration, content, sort_
 SELECT c.id, '完整编舞练习', NULL, 780, '完成一段 Jazz Funk 入门编舞并进行复习。', 3, 'PUBLISHED'
 FROM course c WHERE c.title = 'Jazz Funk 编舞入门'
   AND NOT EXISTS (SELECT 1 FROM course_lesson l WHERE l.course_id = c.id AND l.title = '完整编舞练习');
+
+INSERT INTO learning_record (user_id, course_id, lesson_id, progress_seconds, completed, last_learn_time)
+SELECT u.id, c.id, l.id, 420, 1, '2026-09-02 20:30:00'
+FROM sys_user u
+         JOIN course c ON c.title = 'Hip-hop 基础律动'
+         JOIN course_lesson l ON l.course_id = c.id AND l.title = '认识节拍与律动'
+WHERE u.username = 'member_demo'
+  AND NOT EXISTS (SELECT 1 FROM learning_record r WHERE r.user_id = u.id AND r.lesson_id = l.id);
+
+INSERT INTO learning_record (user_id, course_id, lesson_id, progress_seconds, completed, last_learn_time)
+SELECT u.id, c.id, l.id, 510, 1, '2026-09-02 21:00:00'
+FROM sys_user u
+         JOIN course c ON c.title = 'Hip-hop 基础律动'
+         JOIN course_lesson l ON l.course_id = c.id AND l.title = '基础 Bounce'
+WHERE u.username = 'member_demo'
+  AND NOT EXISTS (SELECT 1 FROM learning_record r WHERE r.user_id = u.id AND r.lesson_id = l.id);
+
+INSERT INTO learning_record (user_id, course_id, lesson_id, progress_seconds, completed, last_learn_time)
+SELECT u.id, c.id, l.id, 260, 0, '2026-09-03 09:15:00'
+FROM sys_user u
+         JOIN course c ON c.title = 'Jazz Funk 编舞入门'
+         JOIN course_lesson l ON l.course_id = c.id AND l.title = 'Jazz Funk 身体线条'
+WHERE u.username = 'dance_demo'
+  AND NOT EXISTS (SELECT 1 FROM learning_record r WHERE r.user_id = u.id AND r.lesson_id = l.id);
