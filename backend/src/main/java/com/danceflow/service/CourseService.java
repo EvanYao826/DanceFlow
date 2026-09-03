@@ -89,7 +89,7 @@ public class CourseService {
         if (record == null) {
             record = new LearningRecord(); record.setUserId(userId); record.setCourseId(courseId); record.setLessonId(lessonId); record.setIsDeleted(0);
         }
-        record.setProgressSeconds(seconds); record.setCompleted(Boolean.TRUE.equals(request.completed()) || seconds >= lesson.getDuration()); record.setLastLearnTime(LocalDateTime.now());
+        record.setProgressSeconds(seconds); record.setCompleted(Boolean.TRUE.equals(request.completed()) || seconds >= lesson.getDuration() ? 1 : 0); record.setLastLearnTime(LocalDateTime.now());
         if (record.getId() == null) recordMapper.insert(record); else recordMapper.updateById(record);
         return lessonVO(lesson, userId);
     }
@@ -105,7 +105,15 @@ public class CourseService {
         }).toList();
     }
 
-    @Transactional public CourseVO create(CourseRequest request) { Course c = new Course(); copy(c, request); c.setStatus("DRAFT"); c.setLessonCount(0); c.setIsDeleted(0); courseMapper.insert(c); return CourseVO.summary(c); }
+    @Transactional public CourseVO create(CourseRequest request) {
+        Course c = new Course();
+        copy(c, request);
+        c.setStatus("DRAFT");
+        c.setLessonCount(0);
+        c.setIsDeleted(0);
+        courseMapper.insert(c);
+        return CourseVO.summary(c);
+    }
     @Transactional public CourseVO update(Long id, CourseRequest request) { Course c = requiredCourse(id); copy(c, request); refreshLessonCount(c); courseMapper.updateById(c); return CourseVO.summary(c); }
     @Transactional public CourseVO updateStatus(Long id, CourseStatusRequest request) { Course c = requiredCourse(id); if (!Set.of("DRAFT", "PUBLISHED", "OFFLINE").contains(request.status())) throw new BusinessException("课程状态不正确"); c.setStatus(request.status()); courseMapper.updateById(c); return CourseVO.summary(c); }
     @Transactional public void delete(Long id) { Course c = requiredCourse(id); long count = lessonMapper.selectCount(new LambdaQueryWrapper<CourseLesson>().eq(CourseLesson::getCourseId, id).eq(CourseLesson::getIsDeleted, 0)); if (count > 0) throw new BusinessException(ResultCode.BAD_REQUEST.getCode(), "课程存在课时，请先删除课时"); c.setIsDeleted(1); courseMapper.updateById(c); }
