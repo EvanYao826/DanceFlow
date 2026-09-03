@@ -58,6 +58,25 @@ router.afterEach((to, from) => { transitionName.value = pagePosition(to.path) >=
 .user-shell > main .lesson-list, .user-shell > main .lesson { border-color: rgba(244,205,250,.2); }
 .user-shell > main .lesson:hover h3 { color: #f0a8fb; }
 .user-shell > main .el-table, .user-shell > main .el-descriptions { --el-table-bg-color: rgba(54,12,70,.72); --el-table-tr-bg-color: transparent; --el-table-header-bg-color: rgba(255,255,255,.08); --el-table-text-color: rgba(255,255,255,.86); --el-table-header-text-color: rgba(255,255,255,.72); --el-border-color-lighter: rgba(244,205,250,.18); }
+.user-shell > main .applications-page .content, .user-shell > main .my-page .content { max-width: 1040px; padding-top: 58px; }
+.user-shell > main .applications-page .el-table { overflow: hidden; border: 1px solid rgba(244,205,250,.2); border-radius: 12px; background: rgba(54,12,70,.72); box-shadow: 0 14px 34px rgba(25,3,40,.18); }
+.user-shell > main .applications-page .el-table th.el-table__cell { background: rgba(255,255,255,.1); color: rgba(255,255,255,.76); }
+.user-shell > main .applications-page .el-table td.el-table__cell { background: transparent; color: rgba(255,255,255,.9); border-color: rgba(244,205,250,.16); }
+.user-shell > main .applications-page .el-table tr:hover > td.el-table__cell { background: rgba(240,168,251,.1); }
+.user-shell > main .applications-page .el-table--striped .el-table__body tr.el-table__row--striped td.el-table__cell { background: rgba(255,255,255,.035); }
+.user-shell > main .my-page .list article { margin-bottom: 14px; padding: 18px 20px; border: 1px solid rgba(244,205,250,.2); border-radius: 12px; background: rgba(54,12,70,.72); box-shadow: 0 12px 28px rgba(25,3,40,.16); transition: transform .2s, border-color .2s, background .2s; }
+.user-shell > main .my-page .list article:hover { transform: translateY(-3px); border-color: rgba(240,168,251,.48); background: rgba(76,18,91,.82); }
+.user-shell > main .my-page .list article h2 { color: #fff; }
+.user-shell > main .my-page .list article .el-progress-bar__outer { background: rgba(255,255,255,.14); }
+.user-shell > main .applications-page .content h1, .user-shell > main .my-page .content h1 { color: #fff !important; }
+.user-shell > main .applications-page .content, .user-shell > main .my-page .content { color: rgba(255,255,255,.9); }
+.user-shell > main .my-page .eyebrow { color: #f0a8fb !important; }
+.user-shell > main .my-page .info p { color: rgba(255,255,255,.72) !important; }
+.user-shell > main .my-page .info h2 { color: #fff !important; }
+.user-shell > main .applications-page .el-table td, .user-shell > main .applications-page .el-table th { color: rgba(255,255,255,.88) !important; }
+.user-shell > main .applications-page .el-table .cell { color: inherit; }
+.user-shell > main .applications-page .el-table .el-button, .user-shell > main .my-page .el-button.is-link { color: #f0a8fb !important; }
+.user-shell > main .applications-page .el-table .el-button:hover, .user-shell > main .my-page .el-button.is-link:hover { color: #ffd5ff !important; }
 .app-shell { overflow-x: hidden; }
 .app-shell > .slide-left-enter-active, .app-shell > .slide-left-leave-active, .app-shell > .slide-right-enter-active, .app-shell > .slide-right-leave-active { transition: opacity .3s ease, transform .3s ease; }
 .slide-left-enter-from { opacity: 0; transform: translateX(42px); }.slide-left-leave-to { opacity: 0; transform: translateX(-42px); }.slide-right-enter-from { opacity: 0; transform: translateX(-42px); }.slide-right-leave-to { opacity: 0; transform: translateX(42px); }
