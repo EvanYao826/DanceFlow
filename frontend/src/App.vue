@@ -7,12 +7,12 @@ import { useRouter } from 'vue-router'
 const router = useRouter()
 const transitionName = ref('slide-left')
 function pagePosition(path: string) {
-  if (path.startsWith('/club') || path === '/') return 0
+  if (path === '/' || path.startsWith('/club')) return 0
   if (path.startsWith('/activities')) return 1
   if (path.startsWith('/courses/my')) return 4
   if (path.startsWith('/courses')) return 2
   if (path.startsWith('/profile/applications')) return 3
-  return 0
+  return -1
 }
 router.afterEach((to, from) => { transitionName.value = pagePosition(to.path) >= pagePosition(from.path) ? 'slide-left' : 'slide-right' })
 </script>

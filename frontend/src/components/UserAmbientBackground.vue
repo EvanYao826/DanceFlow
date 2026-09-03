@@ -11,14 +11,22 @@ const bubbles = ref([
 ])
 
 const risingBubbles = [
-  { id: 11, x: '4%', size: 18, duration: '12s', delay: '-2s', drift: '30px' },
-  { id: 12, x: '15%', size: 10, duration: '9s', delay: '-6s', drift: '-42px' },
-  { id: 13, x: '31%', size: 25, duration: '15s', delay: '-10s', drift: '56px' },
-  { id: 14, x: '48%', size: 13, duration: '10s', delay: '-4s', drift: '-28px' },
-  { id: 15, x: '61%', size: 20, duration: '13s', delay: '-8s', drift: '45px' },
-  { id: 16, x: '77%', size: 11, duration: '8s', delay: '-1s', drift: '-50px' },
-  { id: 17, x: '96%', size: 28, duration: '16s', delay: '-12s', drift: '38px' },
-  { id: 18, x: '39%', size: 8, duration: '7s', delay: '-5s', drift: '-35px' },
+  { id: 11, x: '3%', size: 18, duration: '12s', delay: '-2s', drift: '30px' },
+  { id: 12, x: '11%', size: 10, duration: '9s', delay: '-6s', drift: '-42px' },
+  { id: 13, x: '19%', size: 27, duration: '15s', delay: '-10s', drift: '56px' },
+  { id: 14, x: '28%', size: 13, duration: '10s', delay: '-4s', drift: '-28px' },
+  { id: 15, x: '36%', size: 21, duration: '13s', delay: '-8s', drift: '45px' },
+  { id: 16, x: '43%', size: 9, duration: '8s', delay: '-1s', drift: '-50px' },
+  { id: 17, x: '51%', size: 30, duration: '16s', delay: '-12s', drift: '38px' },
+  { id: 18, x: '59%', size: 12, duration: '7s', delay: '-5s', drift: '-35px' },
+  { id: 19, x: '66%', size: 23, duration: '11s', delay: '-3s', drift: '64px' },
+  { id: 20, x: '73%', size: 8, duration: '8s', delay: '-9s', drift: '-24px' },
+  { id: 21, x: '81%', size: 17, duration: '14s', delay: '-7s', drift: '48px' },
+  { id: 22, x: '88%', size: 26, duration: '12s', delay: '-11s', drift: '-58px' },
+  { id: 23, x: '95%', size: 11, duration: '9s', delay: '-4s', drift: '28px' },
+  { id: 24, x: '23%', size: 7, duration: '6s', delay: '-2s', drift: '-32px' },
+  { id: 25, x: '47%', size: 15, duration: '10s', delay: '-6s', drift: '26px' },
+  { id: 26, x: '92%', size: 19, duration: '15s', delay: '-13s', drift: '-44px' },
 ]
 
 function popBubble(bubble: (typeof bubbles.value)[number]) {
