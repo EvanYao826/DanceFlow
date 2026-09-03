@@ -49,6 +49,30 @@ const router = createRouter({
       meta: { title: '活动详情', portal: 'user' },
     },
     {
+      path: '/courses',
+      name: 'courses',
+      component: () => import('@/views/CoursesView.vue'),
+      meta: { title: '课程中心', portal: 'user' },
+    },
+    {
+      path: '/courses/my',
+      name: 'my-learning',
+      component: () => import('@/views/MyLearningView.vue'),
+      meta: { title: '我的学习', requiresAuth: true, portal: 'user' },
+    },
+    {
+      path: '/courses/:id/lessons/:lessonId',
+      name: 'lesson-learning',
+      component: () => import('@/views/LessonLearningView.vue'),
+      meta: { title: '课时学习', requiresAuth: true, portal: 'user' },
+    },
+    {
+      path: '/courses/:id',
+      name: 'course-detail',
+      component: () => import('@/views/CourseDetailView.vue'),
+      meta: { title: '课程详情', portal: 'user' },
+    },
+    {
       path: '/profile/applications',
       name: 'my-applications',
       component: () => import('@/views/MyApplicationsView.vue'),
