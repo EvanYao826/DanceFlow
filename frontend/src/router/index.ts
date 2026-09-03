@@ -34,6 +34,7 @@ const router = createRouter({
         { path: 'activities', name: 'admin-activities', component: () => import('@/views/ActivityManagementView.vue'), meta: { title: '活动管理' } },
         { path: 'activities/new', name: 'admin-activity-new', component: () => import('@/views/ActivityEditorView.vue'), meta: { title: '新增活动' } },
         { path: 'activities/:id/edit', name: 'admin-activity-edit', component: () => import('@/views/ActivityEditorView.vue'), meta: { title: '编辑活动' } },
+        { path: 'courses', name: 'admin-courses', component: () => import('@/views/CourseManagementView.vue'), meta: { title: '课程管理' } },
       ],
     },
     {
