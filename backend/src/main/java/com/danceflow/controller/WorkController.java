@@ -37,6 +37,8 @@ public class WorkController {
     public Result<WorkVO> update(Authentication authentication, @PathVariable Long id, @Valid @RequestBody WorkRequest request) { return Result.ok(workService.update(id, currentId(authentication), isAdmin(authentication), request)); }
     @DeleteMapping("/works/{id}")
     public Result<Void> delete(Authentication authentication, @PathVariable Long id) { workService.delete(id, currentId(authentication), isAdmin(authentication)); return Result.ok(); }
+    @GetMapping("/works/mine")
+    public Result<PageResult<WorkVO>> mine(Authentication authentication, @RequestParam(defaultValue = "1") long page, @RequestParam(defaultValue = "12") long pageSize) { return Result.ok(workService.mine(page, pageSize, currentId(authentication))); }
     @PostMapping("/works/{id}/like")
     public Result<WorkActionVO> like(Authentication authentication, @PathVariable Long id) { return Result.ok(workService.toggleLike(id, currentId(authentication))); }
     @PostMapping("/works/{id}/collection")

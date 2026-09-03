@@ -11,6 +11,7 @@ const links = [
   { label: '社团档案', path: '/club' },
   { label: '活动', path: '/activities' },
   { label: '课程', path: '/courses' },
+  { label: '作品', path: '/works' },
 ]
 
 function isActive(path: string) {

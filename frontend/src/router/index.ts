@@ -35,7 +35,32 @@ const router = createRouter({
         { path: 'activities/new', name: 'admin-activity-new', component: () => import('@/views/ActivityEditorView.vue'), meta: { title: '新增活动' } },
         { path: 'activities/:id/edit', name: 'admin-activity-edit', component: () => import('@/views/ActivityEditorView.vue'), meta: { title: '编辑活动' } },
         { path: 'courses', name: 'admin-courses', component: () => import('@/views/CourseManagementView.vue'), meta: { title: '课程管理' } },
+        { path: 'works', name: 'admin-works', component: () => import('@/views/WorkManagementView.vue'), meta: { title: '作品审核' } },
       ],
+    },
+    {
+      path: '/works',
+      name: 'works',
+      component: () => import('@/views/WorksView.vue'),
+      meta: { title: '作品社区', portal: 'user' },
+    },
+    {
+      path: '/works/create',
+      name: 'work-create',
+      component: () => import('@/views/WorkCreateView.vue'),
+      meta: { title: '发布作品', requiresAuth: true, portal: 'user' },
+    },
+    {
+      path: '/works/:id',
+      name: 'work-detail',
+      component: () => import('@/views/WorkDetailView.vue'),
+      meta: { title: '作品详情', portal: 'user' },
+    },
+    {
+      path: '/profile/works',
+      name: 'my-works',
+      component: () => import('@/views/MyWorksView.vue'),
+      meta: { title: '我的作品', requiresAuth: true, portal: 'user' },
     },
     {
       path: '/activities',
