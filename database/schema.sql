@@ -163,3 +163,80 @@ CREATE TABLE IF NOT EXISTS learning_record (
     CONSTRAINT fk_learning_record_course FOREIGN KEY (course_id) REFERENCES course(id),
     CONSTRAINT fk_learning_record_lesson FOREIGN KEY (lesson_id) REFERENCES course_lesson(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS stored_file (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    original_name VARCHAR(255) NOT NULL,
+    storage_key VARCHAR(255) NOT NULL,
+    file_url VARCHAR(500) NOT NULL,
+    content_type VARCHAR(100) NOT NULL,
+    file_size BIGINT NOT NULL,
+    is_deleted TINYINT NOT NULL DEFAULT 0,
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    UNIQUE KEY uk_stored_file_key (storage_key),
+    KEY idx_stored_file_type (content_type)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS dance_work (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    user_id BIGINT NOT NULL,
+    title VARCHAR(100) NOT NULL,
+    cover_url VARCHAR(500) NULL,
+    media_url VARCHAR(500) NOT NULL,
+    media_type VARCHAR(30) NOT NULL,
+    description TEXT NULL,
+    dance_type VARCHAR(50) NOT NULL,
+    audit_status VARCHAR(20) NOT NULL DEFAULT 'PENDING',
+    audit_reason VARCHAR(500) NULL,
+    like_count INT NOT NULL DEFAULT 0,
+    comment_count INT NOT NULL DEFAULT 0,
+    collection_count INT NOT NULL DEFAULT 0,
+    view_count INT NOT NULL DEFAULT 0,
+    published_time DATETIME NULL,
+    is_deleted TINYINT NOT NULL DEFAULT 0,
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    KEY idx_dance_work_public (audit_status, created_at),
+    KEY idx_dance_work_user (user_id, created_at),
+    CONSTRAINT fk_dance_work_user FOREIGN KEY (user_id) REFERENCES sys_user(id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS work_like (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    work_id BIGINT NOT NULL,
+    user_id BIGINT NOT NULL,
+    is_deleted TINYINT NOT NULL DEFAULT 0,
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    UNIQUE KEY uk_work_like_user (work_id, user_id),
+    CONSTRAINT fk_work_like_work FOREIGN KEY (work_id) REFERENCES dance_work(id),
+    CONSTRAINT fk_work_like_user FOREIGN KEY (user_id) REFERENCES sys_user(id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS work_collection (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    work_id BIGINT NOT NULL,
+    user_id BIGINT NOT NULL,
+    is_deleted TINYINT NOT NULL DEFAULT 0,
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    UNIQUE KEY uk_work_collection_user (work_id, user_id),
+    CONSTRAINT fk_work_collection_work FOREIGN KEY (work_id) REFERENCES dance_work(id),
+    CONSTRAINT fk_work_collection_user FOREIGN KEY (user_id) REFERENCES sys_user(id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS work_comment (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    work_id BIGINT NOT NULL,
+    user_id BIGINT NOT NULL,
+    parent_id BIGINT NOT NULL DEFAULT 0,
+    content VARCHAR(500) NOT NULL,
+    status VARCHAR(20) NOT NULL DEFAULT 'NORMAL',
+    is_deleted TINYINT NOT NULL DEFAULT 0,
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    KEY idx_work_comment_work (work_id, status, created_at),
+    CONSTRAINT fk_work_comment_work FOREIGN KEY (work_id) REFERENCES dance_work(id),
+    CONSTRAINT fk_work_comment_user FOREIGN KEY (user_id) REFERENCES sys_user(id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

@@ -32,7 +32,7 @@ public class SecurityConfig {
         http.csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/register", "/api/auth/login", "/api/health", "/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
+                        .requestMatchers("/api/auth/register", "/api/auth/login", "/api/health", "/uploads/**", "/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
                         .requestMatchers("/api/activities/my").authenticated()
                         .requestMatchers(org.springframework.http.HttpMethod.GET, "/api/activities", "/api/activities/**").permitAll()
                         .requestMatchers("/api/courses/my").authenticated()
