@@ -134,3 +134,35 @@ FROM sys_user u
          JOIN course_lesson l ON l.course_id = c.id AND l.title = 'Jazz Funk 身体线条'
 WHERE u.username = 'dance_demo'
   AND NOT EXISTS (SELECT 1 FROM learning_record r WHERE r.user_id = u.id AND r.lesson_id = l.id);
+
+-- 阶段四作品测试数据：媒体地址使用前端开发服务器可直接访问的资源，便于本地验收。
+INSERT INTO dance_work (user_id, title, cover_url, media_url, media_type, description, dance_type, audit_status, like_count, comment_count, collection_count, view_count, published_time)
+SELECT u.id, '紫色律动练习', '/src/assets/dance1.png', '/src/assets/dance1.png', 'IMAGE', '记录一次训练中的基础律动和身体控制。', 'Hip-hop', 'PUBLISHED', 2, 1, 1, 18, '2026-09-03 10:00:00'
+FROM sys_user u WHERE u.username = 'member_demo'
+  AND NOT EXISTS (SELECT 1 FROM dance_work w WHERE w.title = '紫色律动练习');
+
+INSERT INTO dance_work (user_id, title, cover_url, media_url, media_type, description, dance_type, audit_status, like_count, comment_count, collection_count, view_count, published_time)
+SELECT u.id, 'Jazz Funk 线条训练', '/src/assets/dance2.png', '/src/assets/dance2.png', 'IMAGE', '用身体线条和重心转换完成一段练习记录。', 'Jazz Funk', 'PUBLISHED', 5, 2, 3, 32, '2026-09-03 11:20:00'
+FROM sys_user u WHERE u.username = 'dance_demo'
+  AND NOT EXISTS (SELECT 1 FROM dance_work w WHERE w.title = 'Jazz Funk 线条训练');
+
+INSERT INTO dance_work (user_id, title, cover_url, media_url, media_type, description, dance_type, audit_status, like_count, comment_count, collection_count, view_count)
+SELECT u.id, '新作品待审核', '/src/assets/dance3.png', '/src/assets/dance3.png', 'IMAGE', '用于管理员审核流程验收的待审核作品。', 'Breaking', 'PENDING', 0, 0, 0, 0
+FROM sys_user u WHERE u.username = 'member_demo'
+  AND NOT EXISTS (SELECT 1 FROM dance_work w WHERE w.title = '新作品待审核');
+
+INSERT INTO work_comment (work_id, user_id, parent_id, content, status)
+SELECT w.id, u.id, 0, '律动很有感觉，继续保持！', 'NORMAL'
+FROM dance_work w CROSS JOIN sys_user u
+WHERE w.title = '紫色律动练习' AND u.username = 'dance_demo'
+  AND NOT EXISTS (SELECT 1 FROM work_comment c WHERE c.work_id = w.id AND c.content = '律动很有感觉，继续保持！');
+
+INSERT INTO work_like (work_id, user_id, is_deleted)
+SELECT w.id, u.id, 0 FROM dance_work w CROSS JOIN sys_user u
+WHERE w.title = '紫色律动练习' AND u.username = 'dance_demo'
+  AND NOT EXISTS (SELECT 1 FROM work_like l WHERE l.work_id = w.id AND l.user_id = u.id);
+
+INSERT INTO work_collection (work_id, user_id, is_deleted)
+SELECT w.id, u.id, 0 FROM dance_work w CROSS JOIN sys_user u
+WHERE w.title = 'Jazz Funk 线条训练' AND u.username = 'member_demo'
+  AND NOT EXISTS (SELECT 1 FROM work_collection c WHERE c.work_id = w.id AND c.user_id = u.id);
