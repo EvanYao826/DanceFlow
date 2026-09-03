@@ -14,9 +14,9 @@ export default defineConfig({
   server: {
     port: 5173,
     proxy: {
-      // 开发环境代理到本地后端，生产环境由 Nginx 反向代理（见 PlanDocs/07）
+      // 开发环境代理到本地后端（8082，8080/8081 被本机其他服务占用），生产环境由 Nginx 反向代理（见 PlanDocs/07）
       '/api': {
-        target: 'http://localhost:8080',
+        target: 'http://localhost:8083',
         changeOrigin: true,
       },
     },
