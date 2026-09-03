@@ -2,7 +2,7 @@
 import { onMounted, reactive, ref } from 'vue'
 import { ElMessage } from 'element-plus'
 import { useRouter } from 'vue-router'
-import BrandLogo from '@/components/BrandLogo.vue'
+import UserTopbar from '@/components/UserTopbar.vue'
 import { applyMember, getMyMember, type MemberProfile } from '@/api/club'
 import { useAuthStore } from '@/stores/auth'
 
@@ -31,8 +31,8 @@ const statusText: Record<string, string> = { PENDING: '审核中', ACTIVE: '已�
 
 <template>
   <main class="club-page">
-    <header class="topbar"><BrandLogo variant="purple" :height="34" to="/" /><nav><el-link @click="router.push('/activities')">活动</el-link><el-link @click="router.push('/courses')">课程</el-link><el-link v-if="auth.isLoggedIn" @click="router.push('/courses/my')">我的学习</el-link><el-link v-if="auth.isLoggedIn" @click="auth.logout(); router.push('/login')">退出登录</el-link><el-link v-else @click="router.push('/login')">登录</el-link></nav></header>
-    <section class="club-hero"><p class="eyebrow">FLOWARTIST · CLUB</p><h1>一起跳，一起成长</h1><p>在训练、活动和舞台之间，找到属于你的节奏。</p></section>
+    <UserTopbar />
+    <section class="club-hero"><p class="eyebrow">FLOWARTIST · CLUB</p><h1>你的街舞社团档案</h1><p>记录加入社团后的每一次训练、活动与成长。</p></section>
     <section class="club-content">
       <div class="intro"><h2>关于社团</h2><p>FlowArtist 街舞社面向高校街舞爱好者，提供日常训练、舞种交流和社团活动，让每一次练习都能被记录、被看见。</p><div class="stats"><span><b>6</b> 常设舞种</span><span><b>24</b> 年度活动</span><span><b>∞</b> 舞者连接</span></div></div>
       <el-card class="apply-card" shadow="never" v-loading="loading">
@@ -45,5 +45,5 @@ const statusText: Record<string, string> = { PENDING: '审核中', ACTIVE: '已�
 </template>
 
 <style scoped>
-.club-page { min-height: 100vh; background: #fbfbfd; color: #24212a; }.topbar { height: 68px; display: flex; align-items: center; justify-content: space-between; max-width: 1160px; margin: auto; padding: 0 24px; background: #fff; }.topbar nav { display: flex; gap: 24px; }.club-hero { padding: 84px 24px 76px; background: var(--df-primary-950); color: #fff; text-align: center; }.eyebrow { color: var(--df-primary-300); letter-spacing: 2px; font-size: 12px; }.club-hero h1 { margin: 14px 0; font-size: clamp(36px, 6vw, 64px); }.club-hero p:last-child { color: var(--df-primary-100); }.club-content { display: grid; grid-template-columns: 1.2fr .8fr; gap: 48px; max-width: 1100px; margin: 0 auto; padding: 56px 24px; }.intro h2 { font-size: 32px; }.intro p { max-width: 560px; line-height: 1.9; color: #68636f; }.stats { display: flex; gap: 34px; margin-top: 42px; color: #77717e; }.stats b { display: block; color: var(--df-primary-700); font-size: 28px; }.apply-card { align-self: start; }.card-title { display: flex; justify-content: space-between; align-items: center; font-weight: 600; }@media (max-width: 700px) { .club-content { grid-template-columns: 1fr; gap: 24px; padding-top: 32px; } .club-hero { padding: 56px 24px; }.stats { gap: 18px; } }
+.club-page { min-height: 100vh; background: linear-gradient(145deg, #fbf7ff 0%, #f5eef9 48%, #fff 100%); color: #24212a; }.topbar { height: 68px; display: flex; align-items: center; justify-content: space-between; max-width: 1160px; margin: auto; padding: 0 24px; background: #fff; }.topbar nav { display: flex; gap: 24px; }.club-hero { padding: 84px 24px 76px; background: linear-gradient(120deg, #4f0052, #751679 52%, #b84cc2); color: #fff; text-align: center; }.eyebrow { color: var(--df-primary-300); letter-spacing: 2px; font-size: 12px; }.club-hero h1 { margin: 14px 0; font-size: clamp(36px, 6vw, 64px); }.club-hero p:last-child { color: var(--df-primary-100); }.club-content { display: grid; grid-template-columns: 1.2fr .8fr; gap: 48px; max-width: 1100px; margin: 0 auto; padding: 56px 24px; }.intro h2 { font-size: 32px; }.intro p { max-width: 560px; line-height: 1.9; color: #68636f; }.stats { display: flex; gap: 34px; margin-top: 42px; color: #77717e; }.stats b { display: block; color: var(--df-primary-700); font-size: 28px; }.apply-card { align-self: start; }.card-title { display: flex; justify-content: space-between; align-items: center; font-weight: 600; }@media (max-width: 700px) { .club-content { grid-template-columns: 1fr; gap: 24px; padding-top: 32px; } .club-hero { padding: 56px 24px; }.stats { gap: 18px; } }
 </style>
