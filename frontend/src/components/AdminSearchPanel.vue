@@ -8,9 +8,11 @@ const configs: Record<string, { placeholder: string; types?: { label: string; va
   activities: { placeholder: '搜索活动名称或地点', types:[{label:'训练课',value:'训练课'},{label:'社团活动',value:'社团活动'},{label:'成果展示',value:'成果展示'},{label:'比赛',value:'比赛'}], statuses:[{label:'草稿',value:'DRAFT'},{label:'已发布',value:'PUBLISHED'},{label:'已关闭',value:'CLOSED'},{label:'已完成',value:'FINISHED'}] },
   courses: { placeholder: '搜索课程名称或教师', statuses:[{label:'草稿',value:'DRAFT'},{label:'已上架',value:'PUBLISHED'},{label:'已下架',value:'OFFLINE'}], dance:true },
   works: { placeholder: '搜索作品名称或作者', statuses:[{label:'待审核',value:'PENDING'},{label:'已发布',value:'PUBLISHED'},{label:'已驳回',value:'REJECTED'},{label:'已下架',value:'OFFLINE'}], dance:true },
+  notices: { placeholder: '搜索公告标题', statuses:[{label:'草稿',value:'DRAFT'},{label:'已发布',value:'PUBLISHED'},{label:'已下线',value:'OFFLINE'}] },
+  posts: { placeholder: '搜索讨论标题或内容', statuses:[{label:'已发布',value:'PUBLISHED'},{label:'已下线',value:'OFFLINE'}] },
 }
-function kind() { if (route.path.includes('/members')) return 'members'; if (route.path.includes('/activities')) return 'activities'; if (route.path.includes('/courses')) return 'courses'; return 'works' }
-function visible() { return ['/admin/members', '/admin/activities', '/admin/courses', '/admin/works'].includes(route.path) }
+function kind() { if (route.path.includes('/members')) return 'members'; if (route.path.includes('/activities')) return 'activities'; if (route.path.includes('/courses')) return 'courses'; if (route.path.includes('/notices')) return 'notices'; if (route.path.includes('/posts')) return 'posts'; return 'works' }
+function visible() { return ['/admin/members', '/admin/activities', '/admin/courses', '/admin/works', '/admin/notices', '/admin/posts'].includes(route.path) }
 const config = () => configs[kind()]
 function sync() { Object.assign(draft, { keyword:String(route.query.keyword || ''), type:String(route.query.type || ''), status:String(route.query.status || ''), danceType:String(route.query.danceType || '') }) }
 function search() { router.replace({ query: Object.fromEntries(Object.entries(draft).filter(([, value]) => value)) }) }

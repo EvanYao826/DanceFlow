@@ -14,6 +14,8 @@ const items = [
   { label: '活动管理', path: '/admin/activities' },
   { label: '课程管理', path: '/admin/courses' },
   { label: '作品审核', path: '/admin/works' },
+  { label: '公告管理', path: '/admin/notices' },
+  { label: '讨论管理', path: '/admin/posts' },
 ]
 const activePath = computed(() => route.path)
 </script>

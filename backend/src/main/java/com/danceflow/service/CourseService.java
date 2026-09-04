@@ -31,11 +31,13 @@ public class CourseService {
     private final CourseMapper courseMapper;
     private final CourseLessonMapper lessonMapper;
     private final LearningRecordMapper recordMapper;
+    private final PointService pointService;
 
-    public CourseService(CourseMapper courseMapper, CourseLessonMapper lessonMapper, LearningRecordMapper recordMapper) {
+    public CourseService(CourseMapper courseMapper, CourseLessonMapper lessonMapper, LearningRecordMapper recordMapper, PointService pointService) {
         this.courseMapper = courseMapper;
         this.lessonMapper = lessonMapper;
         this.recordMapper = recordMapper;
+        this.pointService = pointService;
     }
 
     public PageResult<CourseVO> publicPage(long page, long pageSize, String keyword, String danceType, String difficulty) {
@@ -89,8 +91,10 @@ public class CourseService {
         if (record == null) {
             record = new LearningRecord(); record.setUserId(userId); record.setCourseId(courseId); record.setLessonId(lessonId); record.setIsDeleted(0);
         }
+        boolean completedBefore = record.getId() != null && Integer.valueOf(1).equals(record.getCompleted());
         record.setProgressSeconds(seconds); record.setCompleted(Boolean.TRUE.equals(request.completed()) || seconds >= lesson.getDuration() ? 1 : 0); record.setLastLearnTime(LocalDateTime.now());
         if (record.getId() == null) recordMapper.insert(record); else recordMapper.updateById(record);
+        if (!completedBefore && Integer.valueOf(1).equals(record.getCompleted())) pointService.grantOnce(userId, "COURSE_COMPLETE", 10, "LESSON", lessonId, "完成课时：" + lesson.getTitle());
         return lessonVO(lesson, userId);
     }
 

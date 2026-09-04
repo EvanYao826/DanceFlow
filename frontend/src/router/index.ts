@@ -36,6 +36,8 @@ const router = createRouter({
         { path: 'activities/:id/edit', name: 'admin-activity-edit', component: () => import('@/views/ActivityEditorView.vue'), meta: { title: '编辑活动' } },
         { path: 'courses', name: 'admin-courses', component: () => import('@/views/CourseManagementView.vue'), meta: { title: '课程管理' } },
         { path: 'works', name: 'admin-works', component: () => import('@/views/WorkManagementView.vue'), meta: { title: '作品审核' } },
+        { path: 'notices', name: 'admin-notices', component: () => import('@/views/NoticeManagementView.vue'), meta: { title: '公告管理' } },
+        { path: 'posts', name: 'admin-posts', component: () => import('@/views/PostManagementView.vue'), meta: { title: '讨论管理' } },
       ],
     },
     {

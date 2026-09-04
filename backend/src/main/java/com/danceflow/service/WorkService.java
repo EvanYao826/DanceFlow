@@ -24,11 +24,12 @@ public class WorkService {
     private final WorkCollectionMapper collectionMapper;
     private final WorkCommentMapper commentMapper;
     private final UserMapper userMapper;
+    private final PointService pointService;
 
     public WorkService(DanceWorkMapper workMapper, WorkLikeMapper likeMapper, WorkCollectionMapper collectionMapper,
-                       WorkCommentMapper commentMapper, UserMapper userMapper) {
+                       WorkCommentMapper commentMapper, UserMapper userMapper, PointService pointService) {
         this.workMapper = workMapper; this.likeMapper = likeMapper; this.collectionMapper = collectionMapper;
-        this.commentMapper = commentMapper; this.userMapper = userMapper;
+        this.commentMapper = commentMapper; this.userMapper = userMapper; this.pointService = pointService;
     }
 
     public PageResult<WorkVO> publicPage(long page, long pageSize, String danceType, String sortBy, Long userId) {
@@ -90,7 +91,7 @@ public class WorkService {
         DanceWork work = required(id); work.setCommentCount((work.getCommentCount() == null ? 0 : work.getCommentCount()) + 1); workMapper.updateById(work); return commentVO(c);
     }
     @Transactional public void deleteComment(Long commentId, Long userId, boolean admin) { WorkComment c = commentMapper.selectById(commentId); if (c == null || Integer.valueOf(1).equals(c.getIsDeleted())) throw new BusinessException(ResultCode.NOT_FOUND.getCode(), "评论不存在"); if (!admin && !userId.equals(c.getUserId())) throw new BusinessException(ResultCode.FORBIDDEN); c.setStatus("HIDDEN"); c.setIsDeleted(1); commentMapper.updateById(c); }
-    @Transactional public WorkVO audit(Long id, WorkAuditRequest request) { DanceWork w = required(id); if (!Set.of("PUBLISHED", "REJECTED", "OFFLINE").contains(request.status())) throw new BusinessException("审核状态不正确"); w.setAuditStatus(request.status()); w.setAuditReason(request.reason()); if ("PUBLISHED".equals(request.status())) w.setPublishedTime(LocalDateTime.now()); workMapper.updateById(w); return toVO(w, null); }
+    @Transactional public WorkVO audit(Long id, WorkAuditRequest request) { DanceWork w = required(id); if (!Set.of("PUBLISHED", "REJECTED", "OFFLINE").contains(request.status())) throw new BusinessException("审核状态不正确"); w.setAuditStatus(request.status()); w.setAuditReason(request.reason()); if ("PUBLISHED".equals(request.status())) { w.setPublishedTime(LocalDateTime.now()); pointService.grantOnce(w.getUserId(), "WORK_PUBLISH", 20, "WORK", w.getId(), "发布作品：" + w.getTitle()); } workMapper.updateById(w); return toVO(w, null); }
 
     private boolean toggleLikeRow(Long workId, Long userId) { WorkLike row = likeMapper.selectOne(pairLike(workId, userId)); if (row == null) { row = new WorkLike(); row.setWorkId(workId); row.setUserId(userId); row.setIsDeleted(0); likeMapper.insert(row); return true; } row.setIsDeleted(Integer.valueOf(1).equals(row.getIsDeleted()) ? 0 : 1); likeMapper.updateById(row); return Integer.valueOf(0).equals(row.getIsDeleted()); }
     private boolean toggleCollectionRow(Long workId, Long userId) { WorkCollection row = collectionMapper.selectOne(pairCollection(workId, userId)); if (row == null) { row = new WorkCollection(); row.setWorkId(workId); row.setUserId(userId); row.setIsDeleted(0); collectionMapper.insert(row); return true; } row.setIsDeleted(Integer.valueOf(1).equals(row.getIsDeleted()) ? 0 : 1); collectionMapper.updateById(row); return Integer.valueOf(0).equals(row.getIsDeleted()); }

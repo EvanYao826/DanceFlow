@@ -23,11 +23,13 @@ public class ActivityApplyService {
     private final ActivityApplyMapper applyMapper;
     private final ActivityMapper activityMapper;
     private final UserMapper userMapper;
+    private final PointService pointService;
 
-    public ActivityApplyService(ActivityApplyMapper applyMapper, ActivityMapper activityMapper, UserMapper userMapper) {
+    public ActivityApplyService(ActivityApplyMapper applyMapper, ActivityMapper activityMapper, UserMapper userMapper, PointService pointService) {
         this.applyMapper = applyMapper;
         this.activityMapper = activityMapper;
         this.userMapper = userMapper;
+        this.pointService = pointService;
     }
 
     @Transactional
@@ -44,6 +46,7 @@ public class ActivityApplyService {
         }
         current.setApplyStatus("APPLIED"); current.setRemark(request == null ? null : request.remark()); current.setApplyTime(LocalDateTime.now());
         if (current.getId() == null) applyMapper.insert(current); else applyMapper.updateById(current);
+        pointService.grantOnce(userId, "ACTIVITY_APPLY", 5, "ACTIVITY", activityId, "报名活动：" + activity.getTitle());
         return toVO(current);
     }
 
