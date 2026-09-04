@@ -83,6 +83,18 @@ const router = createRouter({
       meta: { title: '我的收藏', requiresAuth: true, portal: 'user' },
     },
     {
+      path: '/profile/activities',
+      name: 'profile-activities',
+      component: () => import('@/views/ProfileActivitiesView.vue'),
+      meta: { title: '我的活动', requiresAuth: true, portal: 'user' },
+    },
+    {
+      path: '/profile/courses',
+      name: 'profile-courses',
+      component: () => import('@/views/MyLearningView.vue'),
+      meta: { title: '我的学习', requiresAuth: true, portal: 'user' },
+    },
+    {
       path: '/profile/points',
       name: 'profile-points',
       component: () => import('@/views/PointsView.vue'),

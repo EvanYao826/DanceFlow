@@ -99,14 +99,25 @@ public class CourseService {
     }
 
     public List<LearningCourseVO> myLearning(Long userId) {
-        List<Course> courses = courseMapper.selectList(new LambdaQueryWrapper<Course>().eq(Course::getIsDeleted, 0).inSql(Course::getId,
+        List<Course> courses = courseMapper.selectList(learningCourseQuery(userId));
+        return courses.stream().map(course -> learningCourseVO(userId, course)).toList();
+    }
+
+    public PageResult<LearningCourseVO> myLearningPage(Long userId, long page, long pageSize) {
+        Page<Course> result = courseMapper.selectPage(new Page<>(safePage(page), safePageSize(pageSize)), learningCourseQuery(userId));
+        return new PageResult<>(result.getRecords().stream().map(course -> learningCourseVO(userId, course)).toList(), result.getTotal(), result.getCurrent(), result.getSize());
+    }
+
+    private LambdaQueryWrapper<Course> learningCourseQuery(Long userId) {
+        return new LambdaQueryWrapper<Course>().eq(Course::getIsDeleted, 0).inSql(Course::getId,
                 "SELECT DISTINCT course_id FROM learning_record WHERE user_id = " + userId + " AND is_deleted = 0")
-                .orderByDesc(Course::getUpdatedAt));
-        return courses.stream().map(course -> {
-            long completed = recordMapper.selectCount(new LambdaQueryWrapper<LearningRecord>().eq(LearningRecord::getUserId, userId).eq(LearningRecord::getCourseId, course.getId()).eq(LearningRecord::getIsDeleted, 0).eq(LearningRecord::getCompleted, 1));
-            int count = lessonMapper.selectCount(new LambdaQueryWrapper<CourseLesson>().eq(CourseLesson::getCourseId, course.getId()).eq(CourseLesson::getIsDeleted, 0).eq(CourseLesson::getStatus, "PUBLISHED")).intValue();
-            return new LearningCourseVO(course.getId(), course.getTitle(), course.getCoverUrl(), course.getDanceType(), count, completed, count == 0 ? 0 : (int) (completed * 100 / count));
-        }).toList();
+                .orderByDesc(Course::getUpdatedAt);
+    }
+
+    private LearningCourseVO learningCourseVO(Long userId, Course course) {
+        long completed = recordMapper.selectCount(new LambdaQueryWrapper<LearningRecord>().eq(LearningRecord::getUserId, userId).eq(LearningRecord::getCourseId, course.getId()).eq(LearningRecord::getIsDeleted, 0).eq(LearningRecord::getCompleted, 1));
+        int count = lessonMapper.selectCount(new LambdaQueryWrapper<CourseLesson>().eq(CourseLesson::getCourseId, course.getId()).eq(CourseLesson::getIsDeleted, 0).eq(CourseLesson::getStatus, "PUBLISHED")).intValue();
+        return new LearningCourseVO(course.getId(), course.getTitle(), course.getCoverUrl(), course.getDanceType(), count, completed, count == 0 ? 0 : (int) (completed * 100 / count));
     }
 
     @Transactional public CourseVO create(CourseRequest request) {
