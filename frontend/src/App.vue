@@ -31,7 +31,7 @@ router.afterEach((to, from) => { transitionName.value = pagePosition(to.path) >=
 </template>
 
 <style>
-.app-shell { min-height: 100vh; position: relative; }.app-shell > .slide-page-enter-active, .app-shell > .slide-page-leave-active { transition: opacity .28s ease, transform .28s ease; }.slide-page-enter-from { opacity: 0; transform: translateX(34px); }.slide-page-leave-to { opacity: 0; transform: translateX(-34px); }.user-shell > .slide-page-enter-active, .user-shell > .slide-page-leave-active { position: relative; z-index: 1; }
+.app-shell { min-height: 100vh; position: relative; background: #25123e; }.app-shell > .slide-page-enter-active, .app-shell > .slide-page-leave-active { transition: opacity .28s ease, transform .28s ease; }.slide-page-enter-from { opacity: 0; transform: translateX(34px); }.slide-page-leave-to { opacity: 0; transform: translateX(-34px); }.user-shell > .slide-page-enter-active, .user-shell > .slide-page-leave-active { position: relative; z-index: 1; }
 .user-shell .club-page, .user-shell .activities-page, .user-shell .courses-page, .user-shell .detail-page, .user-shell .learn-page, .user-shell .applications-page, .user-shell .my-page { background: transparent !important; }
 .user-shell > .user-topbar { position: relative; z-index: 4; }
 .user-shell > main > .user-topbar { display: none; }

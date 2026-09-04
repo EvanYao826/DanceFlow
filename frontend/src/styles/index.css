@@ -31,6 +31,13 @@
   --el-color-primary-light-9: var(--df-primary-50);
 }
 
+html,
+body,
+#app {
+  min-height: 100%;
+  background: #25123e;
+}
+
 body {
   margin: 0;
   font-family:
