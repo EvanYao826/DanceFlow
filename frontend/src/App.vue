@@ -24,8 +24,8 @@ router.afterEach((to, from) => { transitionName.value = pagePosition(to.path) >=
   <div class="app-shell" :class="{ 'user-shell': $route.meta.portal === 'user' }">
     <UserAmbientBackground v-if="$route.meta.portal === 'user'" />
     <UserTopbar v-if="$route.meta.portal === 'user'" />
-    <transition :name="transitionName" mode="out-in">
-      <router-view :key="$route.fullPath" />
+    <transition :name="transitionName" :css="$route.meta.portal === 'user'" mode="out-in">
+      <router-view :key="$route.meta.portal === 'admin' ? 'admin-shell' : $route.fullPath" />
     </transition>
   </div>
 </template>
