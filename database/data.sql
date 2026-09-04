@@ -58,10 +58,40 @@ SELECT '暑期成果展示', NULL, '本学期训练成果回顾与舞者交流�
 FROM sys_user u WHERE u.username = 'admin_demo'
   AND NOT EXISTS (SELECT 1 FROM activity a WHERE a.title = '暑期成果展示');
 
+INSERT INTO activity (title, cover_url, description, activity_type, start_time, end_time, location, capacity, apply_deadline, status, publisher_id)
+SELECT '舞台表现力小组训练', NULL, '围绕走位、表情和队形完成舞台表现力专项训练。', '专项训练',
+       '2026-09-18 19:00:00', '2026-09-18 21:00:00', '大学生活动中心 302', 24, '2026-09-18 17:00:00', 'PUBLISHED', u.id
+FROM sys_user u WHERE u.username = 'admin_demo'
+  AND NOT EXISTS (SELECT 1 FROM activity a WHERE a.title = '舞台表现力小组训练');
+
+INSERT INTO activity (title, cover_url, description, activity_type, start_time, end_time, location, capacity, apply_deadline, status, publisher_id)
+SELECT '秋季招新体验课', NULL, '面向新社员的舞蹈体验课，包含热身、律动和基础组合。', '体验课',
+       '2026-09-26 14:30:00', '2026-09-26 16:30:00', '大学生活动中心 105', 40, '2026-09-26 12:00:00', 'PUBLISHED', u.id
+FROM sys_user u WHERE u.username = 'admin_demo'
+  AND NOT EXISTS (SELECT 1 FROM activity a WHERE a.title = '秋季招新体验课');
+
 INSERT INTO activity_apply (activity_id, user_id, apply_status, remark)
 SELECT a.id, u.id, 'APPLIED', '期待参加训练。'
 FROM activity a CROSS JOIN sys_user u
 WHERE a.title = '周末 Hip-hop 基础训练' AND u.username = 'member_demo'
+  AND NOT EXISTS (SELECT 1 FROM activity_apply x WHERE x.activity_id = a.id AND x.user_id = u.id);
+
+INSERT INTO activity_apply (activity_id, user_id, apply_status, remark, apply_time)
+SELECT a.id, u.id, 'APPLIED', '已安排时间参加基础训练。', '2026-09-04 10:10:00'
+FROM activity a CROSS JOIN sys_user u
+WHERE a.title = '周末 Hip-hop 基础训练' AND u.username = 'dance_demo'
+  AND NOT EXISTS (SELECT 1 FROM activity_apply x WHERE x.activity_id = a.id AND x.user_id = u.id);
+
+INSERT INTO activity_apply (activity_id, user_id, apply_status, remark, apply_time)
+SELECT a.id, u.id, 'APPLIED', '希望提升舞台表现力。', '2026-09-04 10:25:00'
+FROM activity a CROSS JOIN sys_user u
+WHERE a.title = '舞台表现力小组训练' AND u.username = 'dance_demo'
+  AND NOT EXISTS (SELECT 1 FROM activity_apply x WHERE x.activity_id = a.id AND x.user_id = u.id);
+
+INSERT INTO activity_apply (activity_id, user_id, apply_status, remark, apply_time)
+SELECT a.id, u.id, 'APPLIED', '第一次参加体验课，请多关照。', '2026-09-04 10:40:00'
+FROM activity a CROSS JOIN sys_user u
+WHERE a.title = '秋季招新体验课' AND u.username = 'dance_demo'
   AND NOT EXISTS (SELECT 1 FROM activity_apply x WHERE x.activity_id = a.id AND x.user_id = u.id);
 
 INSERT INTO course (title, cover_url, dance_type, difficulty, teacher_name, description, lesson_count, status, sort_no)
@@ -75,6 +105,10 @@ WHERE NOT EXISTS (SELECT 1 FROM course c WHERE c.title = 'Jazz Funk 编舞入门
 INSERT INTO course (title, cover_url, dance_type, difficulty, teacher_name, description, lesson_count, status, sort_no)
 SELECT '舞台表演训练', NULL, 'Performance', 'ADVANCED', 'Leo 老师', '针对舞台表现力和团队配合的进阶训练课程。', 2, 'DRAFT', 3
 WHERE NOT EXISTS (SELECT 1 FROM course c WHERE c.title = '舞台表演训练');
+
+INSERT INTO course (title, cover_url, dance_type, difficulty, teacher_name, description, lesson_count, status, sort_no)
+SELECT 'K-pop 编舞基础', NULL, 'K-pop', 'BEGINNER', 'Yuna 老师', '从动作记忆到队形切换，完成一段 K-pop 入门组合。', 3, 'PUBLISHED', 3
+WHERE NOT EXISTS (SELECT 1 FROM course c WHERE c.title = 'K-pop 编舞基础');
 
 INSERT INTO course_lesson (course_id, title, video_url, duration, content, sort_no, status)
 SELECT c.id, '认识节拍与律动', NULL, 420, '认识八拍结构，练习身体随音乐自然摆动。', 1, 'PUBLISHED'
@@ -111,6 +145,21 @@ SELECT c.id, '完整编舞练习', NULL, 780, '完成一段 Jazz Funk 入门编�
 FROM course c WHERE c.title = 'Jazz Funk 编舞入门'
   AND NOT EXISTS (SELECT 1 FROM course_lesson l WHERE l.course_id = c.id AND l.title = '完整编舞练习');
 
+INSERT INTO course_lesson (course_id, title, video_url, duration, content, sort_no, status)
+SELECT c.id, 'K-pop 节拍认识', NULL, 480, '跟随音乐认识常见 K-pop 节拍和动作重拍。', 1, 'PUBLISHED'
+FROM course c WHERE c.title = 'K-pop 编舞基础'
+  AND NOT EXISTS (SELECT 1 FROM course_lesson l WHERE l.course_id = c.id AND l.title = 'K-pop 节拍认识');
+
+INSERT INTO course_lesson (course_id, title, video_url, duration, content, sort_no, status)
+SELECT c.id, '副歌动作练习', NULL, 660, '拆分练习副歌动作，注意手脚配合和发力方向。', 2, 'PUBLISHED'
+FROM course c WHERE c.title = 'K-pop 编舞基础'
+  AND NOT EXISTS (SELECT 1 FROM course_lesson l WHERE l.course_id = c.id AND l.title = '副歌动作练习');
+
+INSERT INTO course_lesson (course_id, title, video_url, duration, content, sort_no, status)
+SELECT c.id, '队形与完整串联', NULL, 720, '完成队形切换并串联整段入门编舞。', 3, 'PUBLISHED'
+FROM course c WHERE c.title = 'K-pop 编舞基础'
+  AND NOT EXISTS (SELECT 1 FROM course_lesson l WHERE l.course_id = c.id AND l.title = '队形与完整串联');
+
 INSERT INTO learning_record (user_id, course_id, lesson_id, progress_seconds, completed, last_learn_time)
 SELECT u.id, c.id, l.id, 420, 1, '2026-09-02 20:30:00'
 FROM sys_user u
@@ -132,6 +181,34 @@ SELECT u.id, c.id, l.id, 260, 0, '2026-09-03 09:15:00'
 FROM sys_user u
          JOIN course c ON c.title = 'Jazz Funk 编舞入门'
          JOIN course_lesson l ON l.course_id = c.id AND l.title = 'Jazz Funk 身体线条'
+WHERE u.username = 'dance_demo'
+  AND NOT EXISTS (SELECT 1 FROM learning_record r WHERE r.user_id = u.id AND r.lesson_id = l.id);
+
+INSERT INTO learning_record (user_id, course_id, lesson_id, progress_seconds, completed, last_learn_time)
+SELECT u.id, c.id, l.id, 420, 1, '2026-09-03 19:20:00'
+FROM sys_user u JOIN course c ON c.title = 'Hip-hop 基础律动'
+                JOIN course_lesson l ON l.course_id = c.id AND l.title = '认识节拍与律动'
+WHERE u.username = 'dance_demo'
+  AND NOT EXISTS (SELECT 1 FROM learning_record r WHERE r.user_id = u.id AND r.lesson_id = l.id);
+
+INSERT INTO learning_record (user_id, course_id, lesson_id, progress_seconds, completed, last_learn_time)
+SELECT u.id, c.id, l.id, 330, 0, '2026-09-04 09:30:00'
+FROM sys_user u JOIN course c ON c.title = 'Hip-hop 基础律动'
+                JOIN course_lesson l ON l.course_id = c.id AND l.title = '基础 Bounce'
+WHERE u.username = 'dance_demo'
+  AND NOT EXISTS (SELECT 1 FROM learning_record r WHERE r.user_id = u.id AND r.lesson_id = l.id);
+
+INSERT INTO learning_record (user_id, course_id, lesson_id, progress_seconds, completed, last_learn_time)
+SELECT u.id, c.id, l.id, 480, 1, '2026-09-04 11:00:00'
+FROM sys_user u JOIN course c ON c.title = 'K-pop 编舞基础'
+                JOIN course_lesson l ON l.course_id = c.id AND l.title = 'K-pop 节拍认识'
+WHERE u.username = 'dance_demo'
+  AND NOT EXISTS (SELECT 1 FROM learning_record r WHERE r.user_id = u.id AND r.lesson_id = l.id);
+
+INSERT INTO learning_record (user_id, course_id, lesson_id, progress_seconds, completed, last_learn_time)
+SELECT u.id, c.id, l.id, 260, 0, '2026-09-04 11:30:00'
+FROM sys_user u JOIN course c ON c.title = 'K-pop 编舞基础'
+                JOIN course_lesson l ON l.course_id = c.id AND l.title = '副歌动作练习'
 WHERE u.username = 'dance_demo'
   AND NOT EXISTS (SELECT 1 FROM learning_record r WHERE r.user_id = u.id AND r.lesson_id = l.id);
 
