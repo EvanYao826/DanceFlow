@@ -1,12 +1,15 @@
 <script setup lang="ts">
-import { onMounted, reactive, ref } from 'vue'
+import { onMounted, reactive, ref, watch } from 'vue'
+import { useRoute } from 'vue-router'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { getMembers, getMember, auditMember, updateMember, updateMemberStatus } from '@/api/admin'
 import type { MemberProfile } from '@/api/club'
 const records = ref<MemberProfile[]>([]); const loading = ref(true); const drawerVisible = ref(false); const drawerLoading = ref(false); const saving = ref(false); const selected = ref<MemberProfile | null>(null)
+const route = useRoute()
 const form = reactive({ danceType: '', skillLevel: '', bio: '' })
-async function load() { loading.value = true; try { records.value = (await getMembers()).data.records } finally { loading.value = false } }
+async function load() { loading.value = true; try { const all = (await getMembers()).data.records; const keyword = String(route.query.keyword || '').toLowerCase(); records.value = all.filter(item => (!keyword || `${item.nickname} ${item.username}`.toLowerCase().includes(keyword)) && (!route.query.danceType || item.danceType === route.query.danceType) && (!route.query.status || item.memberStatus === route.query.status)) } finally { loading.value = false } }
 onMounted(load)
+watch(() => route.fullPath, load)
 async function openDetail(row: MemberProfile) { drawerVisible.value = true; drawerLoading.value = true; try { selected.value = (await getMember(row.id)).data; Object.assign(form, { danceType: selected.value.danceType, skillLevel: selected.value.skillLevel, bio: selected.value.bio || '' }) } finally { drawerLoading.value = false } }
 async function save() { if (!selected.value) return; saving.value = true; try { selected.value = (await updateMember(selected.value.id, form)).data; ElMessage.success('档案已保存'); await load() } finally { saving.value = false } }
 async function audit(row: MemberProfile, status: string) { const reason = await ElMessageBox.prompt('可填写审核说明', '审核申请', { inputPlaceholder: '审核说明' }).then(r => r.value).catch(() => null); if (reason === null) return; await auditMember(row.id, status, reason); ElMessage.success('审核完成'); await load() }

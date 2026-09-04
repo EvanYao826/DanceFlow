@@ -1,11 +1,13 @@
 <script setup lang="ts">
-import { onMounted, reactive, ref } from 'vue'
+import { onMounted, reactive, ref, watch } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { createCourse, createLesson, deleteCourse, deleteLesson, getAdminCourse, getAdminCourses, updateCourse, updateCourseStatus, updateLesson, type Course, type CourseLesson } from '@/api/courses'
-const records = ref<Course[]>([]); const loading = ref(true); const dialog = ref(false); const lessonDialog = ref(false); const editing = ref(false); const current = ref<Course | null>(null); const saving = ref(false); const form = reactive({ title:'', coverUrl:'', danceType:'Hip-hop', difficulty:'BEGINNER', teacherName:'', description:'', sortNo:0 }); const lessonForm = reactive({ id: 0, title:'', videoUrl:'', duration:0, content:'', sortNo:1, status:'PUBLISHED' })
+import { useRoute } from 'vue-router'
+const records = ref<Course[]>([]); const loading = ref(true); const dialog = ref(false); const lessonDialog = ref(false); const editing = ref(false); const current = ref<Course | null>(null); const saving = ref(false); const route = useRoute(); const form = reactive({ title:'', coverUrl:'', danceType:'Hip-hop', difficulty:'BEGINNER', teacherName:'', description:'', sortNo:0 }); const lessonForm = reactive({ id: 0, title:'', videoUrl:'', duration:0, content:'', sortNo:1, status:'PUBLISHED' })
 const labels: Record<string, string> = { DRAFT: '草稿', PUBLISHED: '已上架', OFFLINE: '已下架' }
-async function load() { loading.value = true; try { records.value = (await getAdminCourses({ page: 1, pageSize: 100 })).data.records } finally { loading.value = false } }
+async function load() { loading.value = true; try { const all = (await getAdminCourses({ page: 1, pageSize: 100 })).data.records; const keyword = String(route.query.keyword || '').toLowerCase(); records.value = all.filter(item => (!keyword || `${item.title} ${item.teacherName}`.toLowerCase().includes(keyword)) && (!route.query.danceType || item.danceType === route.query.danceType) && (!route.query.status || item.status === route.query.status)) } finally { loading.value = false } }
 onMounted(load)
+watch(() => route.fullPath, load)
 function openCreate() { editing.value = false; Object.assign(form, { title:'', coverUrl:'', danceType:'Hip-hop', difficulty:'BEGINNER', teacherName:'', description:'', sortNo:0 }); dialog.value = true }
 async function openEdit(row: Course) { editing.value = true; current.value = row; Object.assign(form, (await getAdminCourse(String(row.id))).data); dialog.value = true }
 async function saveCourse() { if (!form.title.trim() || !form.teacherName.trim()) { ElMessage.error('请填写课程标题和教师姓名'); return }; saving.value = true; try { editing.value ? await updateCourse(String(current.value!.id), form) : await createCourse(form); dialog.value = false; ElMessage.success('课程已保存'); await load() } finally { saving.value = false } }
