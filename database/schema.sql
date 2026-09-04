@@ -240,3 +240,52 @@ CREATE TABLE IF NOT EXISTS work_comment (
     CONSTRAINT fk_work_comment_work FOREIGN KEY (work_id) REFERENCES dance_work(id),
     CONSTRAINT fk_work_comment_user FOREIGN KEY (user_id) REFERENCES sys_user(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS forum_post (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    user_id BIGINT NOT NULL,
+    title VARCHAR(120) NOT NULL,
+    content TEXT NOT NULL,
+    cover_url VARCHAR(500) NULL,
+    category VARCHAR(30) NOT NULL DEFAULT '交流',
+    status VARCHAR(20) NOT NULL DEFAULT 'PUBLISHED',
+    view_count INT NOT NULL DEFAULT 0,
+    like_count INT NOT NULL DEFAULT 0,
+    is_deleted TINYINT NOT NULL DEFAULT 0,
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    KEY idx_forum_post_public (status, category, created_at),
+    KEY idx_forum_post_user (user_id, created_at),
+    CONSTRAINT fk_forum_post_user FOREIGN KEY (user_id) REFERENCES sys_user(id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS notice (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    title VARCHAR(120) NOT NULL,
+    content TEXT NOT NULL,
+    publisher_id BIGINT NOT NULL,
+    publish_status VARCHAR(20) NOT NULL DEFAULT 'DRAFT',
+    publish_time DATETIME NULL,
+    top_flag TINYINT NOT NULL DEFAULT 0,
+    is_deleted TINYINT NOT NULL DEFAULT 0,
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    KEY idx_notice_public (publish_status, top_flag, publish_time),
+    CONSTRAINT fk_notice_publisher FOREIGN KEY (publisher_id) REFERENCES sys_user(id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS user_point_log (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    user_id BIGINT NOT NULL,
+    point_type VARCHAR(30) NOT NULL,
+    point_value INT NOT NULL,
+    source_type VARCHAR(30) NOT NULL,
+    source_id BIGINT NOT NULL,
+    remark VARCHAR(255) NULL,
+    is_deleted TINYINT NOT NULL DEFAULT 0,
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    UNIQUE KEY uk_user_point_source (user_id, point_type, source_type, source_id),
+    KEY idx_user_point_log_user (user_id, created_at),
+    CONSTRAINT fk_user_point_log_user FOREIGN KEY (user_id) REFERENCES sys_user(id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

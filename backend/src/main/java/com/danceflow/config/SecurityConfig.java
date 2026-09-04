@@ -39,6 +39,7 @@ public class SecurityConfig {
                         .requestMatchers(org.springframework.http.HttpMethod.GET, "/api/courses", "/api/courses/*").permitAll()
                         .requestMatchers("/api/works/mine").authenticated()
                         .requestMatchers(org.springframework.http.HttpMethod.GET, "/api/works", "/api/works/**").permitAll()
+                        .requestMatchers(org.springframework.http.HttpMethod.GET, "/api/community/posts", "/api/community/posts/**", "/api/notices", "/api/notices/**").permitAll()
                         .requestMatchers(org.springframework.http.HttpMethod.GET, "/api/courses/*/lessons/*").authenticated()
                         .requestMatchers("/api/courses/*/lessons/*/progress").authenticated()
                         .requestMatchers("/api/admin/**").hasAnyRole("ADMIN", "SUPER_ADMIN")

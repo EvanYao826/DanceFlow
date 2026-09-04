@@ -166,3 +166,29 @@ INSERT INTO work_collection (work_id, user_id, is_deleted)
 SELECT w.id, u.id, 0 FROM dance_work w CROSS JOIN sys_user u
 WHERE w.title = 'Jazz Funk 线条训练' AND u.username = 'member_demo'
   AND NOT EXISTS (SELECT 1 FROM work_collection c WHERE c.work_id = w.id AND c.user_id = u.id);
+
+INSERT INTO forum_post (user_id, title, content, category, status, view_count, like_count)
+SELECT u.id, '第一次参加社团训练的感受', '今天完成了基础律动训练，大家互相纠正动作的氛围很好。想请教大家平时如何练习音乐感？', '训练交流', 'PUBLISHED', 26, 4
+FROM sys_user u WHERE u.username = 'dance_demo'
+  AND NOT EXISTS (SELECT 1 FROM forum_post p WHERE p.title = '第一次参加社团训练的感受');
+
+INSERT INTO forum_post (user_id, title, content, category, status, view_count, like_count)
+SELECT u.id, '求推荐适合入门的 Jazz Funk 歌单', '最近在练习身体线条和重心转换，希望找一些节奏清晰、适合反复练习的音乐。', '求助问答', 'PUBLISHED', 18, 2
+FROM sys_user u WHERE u.username = 'member_demo'
+  AND NOT EXISTS (SELECT 1 FROM forum_post p WHERE p.title = '求推荐适合入门的 Jazz Funk 歌单');
+
+INSERT INTO notice (title, content, publisher_id, publish_status, publish_time, top_flag)
+SELECT '本周训练安排', '本周六下午进行 Hip-hop 基础训练，请提前十分钟到场完成签到。', u.id, 'PUBLISHED', '2026-09-04 09:00:00', 1
+FROM sys_user u WHERE u.username = 'admin_demo'
+  AND NOT EXISTS (SELECT 1 FROM notice n WHERE n.title = '本周训练安排');
+
+INSERT INTO notice (title, content, publisher_id, publish_status, publish_time, top_flag)
+SELECT '新生见面会报名开启', '欢迎新成员报名参加新生舞者见面会，现场将介绍本学期活动与课程计划。', u.id, 'PUBLISHED', '2026-09-03 10:00:00', 0
+FROM sys_user u WHERE u.username = 'admin_demo'
+  AND NOT EXISTS (SELECT 1 FROM notice n WHERE n.title = '新生见面会报名开启');
+
+INSERT INTO user_point_log (user_id, point_type, point_value, source_type, source_id, remark)
+SELECT u.id, 'WORK_PUBLISH', 20, 'WORK', w.id, '发布作品：紫色律动练习'
+FROM sys_user u JOIN dance_work w ON w.title = '紫色律动练习'
+WHERE u.username = 'member_demo'
+  AND NOT EXISTS (SELECT 1 FROM user_point_log l WHERE l.user_id = u.id AND l.point_type = 'WORK_PUBLISH' AND l.source_type = 'WORK' AND l.source_id = w.id);
