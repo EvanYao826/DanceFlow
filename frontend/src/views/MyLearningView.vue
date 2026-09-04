@@ -4,7 +4,7 @@ import { useRouter } from 'vue-router'
 import type { LearningCourse } from '@/api/courses'
 import { getProfileCourses } from '@/api/profile'
 const router = useRouter(); const records = ref<LearningCourse[]>([]); const loading = ref(true); const page = ref(1); const total = ref(0)
-async function load(nextPage = page.value) { loading.value = true; page.value = nextPage; try { const { data } = await getProfileCourses({ page: page.value, pageSize: 10 }); records.value = data.records; total.value = data.total } finally { loading.value = false } }
+async function load(nextPage = page.value) { loading.value = true; page.value = nextPage; try { const { data } = await getProfileCourses({ page: page.value, pageSize: 10 }); if (Array.isArray(data)) { records.value = data; total.value = data.length } else { records.value = data.records; total.value = data.total } } finally { loading.value = false } }
 onMounted(load)
 </script>
 <template><main class="my-page"><section class="content"><div class="page-heading"><p class="eyebrow">MY LEARNING</p><h1>我的学习</h1><p>继续你的课程训练，记录每一次进步。</p></div><div v-loading="loading" class="list"><el-empty v-if="!loading && !records.length" description="还没有开始学习课程" /><article v-for="item in records" :key="item.courseId" @click="router.push(`/courses/${item.courseId}`)"><div class="cover">{{ item.danceType }}</div><div class="info"><h2>{{ item.title }}</h2><p>{{ item.completedCount }} / {{ item.lessonCount }} 个课时已完成</p><el-progress :percentage="item.progressPercent" /></div><el-button link type="primary">继续学习 →</el-button></article></div><el-pagination v-if="total > 10" v-model:current-page="page" layout="prev, pager, next" :page-size="10" :total="total" @current-change="load" /></section></main></template>
