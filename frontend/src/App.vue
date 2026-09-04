@@ -17,16 +17,21 @@ function pagePosition(path: string) {
   if (path.startsWith('/profile')) return 6
   return 0
 }
-router.afterEach((to, from) => { transitionName.value = pagePosition(to.path) >= pagePosition(from.path) ? 'slide-left' : 'slide-right' })
+router.afterEach((to, from) => {
+  transitionName.value = pagePosition(to.path) >= pagePosition(from.path) ? 'slide-left' : 'slide-right'
+})
 </script>
 
 <template>
   <div class="app-shell" :class="{ 'user-shell': $route.meta.portal === 'user' }">
     <UserAmbientBackground v-if="$route.meta.portal === 'user'" />
     <UserTopbar v-if="$route.meta.portal === 'user'" />
-    <transition :name="transitionName" :css="$route.meta.portal === 'user'" mode="out-in">
-      <router-view :key="$route.meta.portal === 'admin' ? 'admin-shell' : $route.fullPath" />
-    </transition>
+    <router-view v-slot="{ Component, route }">
+      <component v-if="route.meta.portal === 'admin'" :is="Component" key="admin-shell" />
+      <transition v-else :name="transitionName" mode="out-in">
+        <component :is="Component" :key="route.fullPath" />
+      </transition>
+    </router-view>
   </div>
 </template>
 
