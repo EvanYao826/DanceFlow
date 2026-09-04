@@ -39,10 +39,52 @@ const router = createRouter({
       ],
     },
     {
+      path: '/community',
+      name: 'community',
+      component: () => import('@/views/CommunityView.vue'),
+      meta: { title: '社区', portal: 'user' },
+    },
+    {
+      path: '/community/posts/create',
+      name: 'community-post-create',
+      component: () => import('@/views/CommunityPostEditorView.vue'),
+      meta: { title: '发布讨论', requiresAuth: true, portal: 'user' },
+    },
+    {
+      path: '/community/posts/:id',
+      name: 'community-post-detail',
+      component: () => import('@/views/CommunityPostDetailView.vue'),
+      meta: { title: '讨论详情', portal: 'user' },
+    },
+    {
+      path: '/notices/:id',
+      name: 'notice-detail',
+      component: () => import('@/views/NoticeDetailView.vue'),
+      meta: { title: '公告详情', portal: 'user' },
+    },
+    {
       path: '/works',
       name: 'works',
       component: () => import('@/views/WorksView.vue'),
       meta: { title: '作品社区', portal: 'user' },
+    },
+    {
+      path: '/profile',
+      name: 'profile',
+      component: () => import('@/views/ProfileView.vue'),
+      meta: { title: '个人中心', requiresAuth: true, portal: 'user' },
+    },
+    {
+      path: '/profile/collections',
+      name: 'profile-collections',
+      component: () => import('@/views/CollectionsView.vue'),
+      meta: { title: '我的收藏', requiresAuth: true, portal: 'user' },
+    },
+    {
+      path: '/profile/points',
+      name: 'profile-points',
+      component: () => import('@/views/PointsView.vue'),
+      meta: { title: '积分明细', requiresAuth: true, portal: 'user' },
     },
     {
       path: '/works/create',

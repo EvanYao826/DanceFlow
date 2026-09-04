@@ -11,14 +11,15 @@ const links = [
   { label: '社团档案', path: '/club' },
   { label: '活动', path: '/activities' },
   { label: '课程', path: '/courses' },
-  { label: '作品', path: '/works' },
+  { label: '社区', path: '/community' },
 ]
 
 function isActive(path: string) {
   return route.path === path || (path !== '/courses' && route.path.startsWith(`${path}/`))
 }
 
-function logout() {
+function handleAccount(command: string) {
+  if (command === 'profile') { router.push('/profile'); return }
   auth.logout()
   router.push('/login')
 }
@@ -33,9 +34,9 @@ function logout() {
       <router-link v-if="auth.isLoggedIn" to="/courses/my" :class="{ active: isActive('/courses/my') }">我的学习</router-link>
     </nav>
     <div class="account-area">
-      <el-dropdown v-if="auth.isLoggedIn" trigger="click" @command="logout">
+      <el-dropdown v-if="auth.isLoggedIn" trigger="click" @command="handleAccount">
         <button class="account-button" type="button"><span class="avatar">{{ (auth.user?.nickname || auth.user?.username || '舞').slice(0, 1) }}</span><span class="account-name">{{ auth.user?.nickname || auth.user?.username }}</span><span class="chevron">⌄</span></button>
-        <template #dropdown><el-dropdown-menu><el-dropdown-item command="logout">退出登录</el-dropdown-item></el-dropdown-menu></template>
+        <template #dropdown><el-dropdown-menu><el-dropdown-item command="profile">个人中心</el-dropdown-item><el-dropdown-item command="logout" divided>退出登录</el-dropdown-item></el-dropdown-menu></template>
       </el-dropdown>
       <el-link v-else type="primary" @click="router.push('/login')">登录</el-link>
     </div>

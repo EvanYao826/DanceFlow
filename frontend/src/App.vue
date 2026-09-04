@@ -13,8 +13,8 @@ function pagePosition(path: string) {
   if (path.startsWith('/courses/my')) return 4
   if (path.startsWith('/courses')) return 2
   if (path.startsWith('/profile/applications')) return 3
-  if (path.startsWith('/works')) return 5
-  if (path.startsWith('/profile/works')) return 6
+  if (path.startsWith('/community') || path.startsWith('/notices') || path.startsWith('/works')) return 5
+  if (path.startsWith('/profile')) return 6
   return 0
 }
 router.afterEach((to, from) => { transitionName.value = pagePosition(to.path) >= pagePosition(from.path) ? 'slide-left' : 'slide-right' })
