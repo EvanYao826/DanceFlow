@@ -85,6 +85,30 @@ router.afterEach((to, from) => {
 .user-shell > main .applications-page .el-table .el-button, .user-shell > main .my-page .el-button.is-link { color: #f0a8fb !important; }
 .user-shell > main .applications-page .el-table .el-button:hover, .user-shell > main .my-page .el-button.is-link:hover { color: #ffd5ff !important; }
 .app-shell { overflow-x: hidden; }
+.user-shell .detail-content > .el-link,
+.user-shell .detail > .el-link,
+.user-shell .notice-detail article > .el-button,
+.user-shell .post-detail article > .el-button,
+.user-shell .heading > .el-button,
+.admin-content .editor-title > .el-button,
+.admin-content .preview-page > .el-button,
+.admin-content .admin-page > header > .el-button { display: inline-flex; align-items: center; gap: 7px; font-weight: 600; }
+.user-shell .detail-content > .el-link::before,
+.user-shell .detail > .el-link::before,
+.user-shell .notice-detail article > .el-button::before,
+.user-shell .post-detail article > .el-button::before,
+.user-shell .heading > .el-button::before,
+.admin-content .editor-title > .el-button::before,
+.admin-content .preview-page > .el-button::before,
+.admin-content .admin-page > header > .el-button::before { content: '\2190'; font-size: 18px; line-height: 1; }
+.user-shell .detail-content > .el-link,
+.user-shell .detail > .el-link,
+.user-shell .notice-detail article > .el-button,
+.user-shell .post-detail article > .el-button,
+.user-shell .heading > .el-button { color: #f0a8fb !important; }
+.admin-content .editor-title > .el-button,
+.admin-content .preview-page > .el-button,
+.admin-content .admin-page > header > .el-button { color: var(--df-primary-700) !important; }
 .app-shell > .slide-left-enter-active, .app-shell > .slide-left-leave-active, .app-shell > .slide-right-enter-active, .app-shell > .slide-right-leave-active { transition: opacity .3s ease, transform .3s ease; }
 .slide-left-enter-from { opacity: 0; transform: translateX(42px); }.slide-left-leave-to { opacity: 0; transform: translateX(-42px); }.slide-right-enter-from { opacity: 0; transform: translateX(-42px); }.slide-right-leave-to { opacity: 0; transform: translateX(42px); }
 </style>
