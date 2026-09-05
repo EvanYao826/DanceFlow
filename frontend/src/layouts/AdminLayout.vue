@@ -3,7 +3,6 @@ import { computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import BrandLogo from '@/components/BrandLogo.vue'
 import { useAuthStore } from '@/stores/auth'
-import AdminSearchPanel from '@/components/AdminSearchPanel.vue'
 
 const route = useRoute()
 const router = useRouter()
@@ -28,7 +27,7 @@ const activePath = computed(() => route.path)
       <nav><router-link v-for="item in items" :key="item.path" :to="item.path" :class="{ active: activePath === item.path }">{{ item.label }}</router-link></nav>
       <div class="sidebar-bottom"><el-button link @click="auth.logout(); router.push('/login?admin=1&redirect=/admin')">退出管理端</el-button></div>
     </aside>
-    <div class="admin-main"><header class="admin-header"><span>{{ route.meta.title || '管理端' }}</span><span class="user-name">{{ auth.user?.nickname || '管理员' }}</span></header><main class="admin-content"><AdminSearchPanel /><router-view /></main></div>
+    <div class="admin-main"><header class="admin-header"><span>{{ route.meta.title || '管理端' }}</span><span class="user-name">{{ auth.user?.nickname || '管理员' }}</span></header><main class="admin-content"><router-view /></main></div>
   </div>
 </template>
 
