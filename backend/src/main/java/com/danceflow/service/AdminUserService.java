@@ -25,7 +25,7 @@ public class AdminUserService {
         Page<User> data = mapper.selectPage(new Page<>(Math.max(1, page), Math.min(Math.max(1, pageSize), 100)),
                 new LambdaQueryWrapper<User>().eq(User::getIsDeleted, 0)
                         .and(keyword != null && !keyword.isBlank(), q -> q.like(User::getUsername, keyword).or().like(User::getNickname, keyword))
-                        .eq(status != null, User::getStatus).orderByDesc(User::getCreatedAt));
+                        .eq(status != null, User::getStatus, status).orderByDesc(User::getCreatedAt));
         return new PageResult<>(data.getRecords().stream().map(AdminUserVO::from).toList(), data.getTotal(), data.getCurrent(), data.getSize());
     }
     @Transactional public AdminUserVO status(Long id, AdminUserStatusRequest request) { User user = required(id); if (!Set.of(0, 1).contains(request.status())) throw new BusinessException(ResultCode.BAD_REQUEST.getCode(), "用户状态不正确"); user.setStatus(request.status()); mapper.updateById(user); return AdminUserVO.from(user); }
