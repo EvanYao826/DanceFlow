@@ -41,7 +41,6 @@ const router = createRouter({
         { path: 'notices', name: 'admin-notices', component: () => import('@/views/NoticeManagementView.vue'), meta: { title: '公告管理' } },
         { path: 'posts', name: 'admin-posts', component: () => import('@/views/PostManagementView.vue'), meta: { title: '讨论管理' } },
         { path: 'logs', name: 'admin-logs', component: () => import('@/views/AdminLogsView.vue'), meta: { title: '操作日志' } },
-        { path: 'settings', name: 'admin-settings', component: () => import('@/views/AdminSettingsView.vue'), meta: { title: '系统设置' } },
       ],
     },
     {
