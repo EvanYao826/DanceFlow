@@ -9,12 +9,15 @@ const router = useRouter()
 const auth = useAuthStore()
 const items = [
   { label: '工作台', path: '/admin/dashboard' },
+  { label: '用户管理', path: '/admin/users' },
   { label: '成员审核', path: '/admin/members' },
   { label: '活动管理', path: '/admin/activities' },
   { label: '课程管理', path: '/admin/courses' },
   { label: '作品审核', path: '/admin/works' },
   { label: '公告管理', path: '/admin/notices' },
   { label: '讨论管理', path: '/admin/posts' },
+  { label: '操作日志', path: '/admin/logs' },
+  { label: '系统设置', path: '/admin/settings' },
 ]
 const activePath = computed(() => route.path)
 </script>

@@ -10,9 +10,11 @@ const configs: Record<string, { placeholder: string; types?: { label: string; va
   works: { placeholder: '搜索作品名称或作者', statuses:[{label:'待审核',value:'PENDING'},{label:'已发布',value:'PUBLISHED'},{label:'已驳回',value:'REJECTED'},{label:'已下架',value:'OFFLINE'}], dance:true },
   notices: { placeholder: '搜索公告标题', statuses:[{label:'草稿',value:'DRAFT'},{label:'已发布',value:'PUBLISHED'},{label:'已下线',value:'OFFLINE'}] },
   posts: { placeholder: '搜索讨论标题或内容', statuses:[{label:'已发布',value:'PUBLISHED'},{label:'已下线',value:'OFFLINE'}] },
+  users: { placeholder: '搜索账号或昵称', statuses:[{label:'正常',value:'1'},{label:'已禁用',value:'0'}] },
+  logs: { placeholder: '搜索操作者、路径或详情', statuses:[{label:'成功',value:'SUCCESS'},{label:'失败',value:'FAILED'}] },
 }
-function kind() { if (route.path.includes('/members')) return 'members'; if (route.path.includes('/activities')) return 'activities'; if (route.path.includes('/courses')) return 'courses'; if (route.path.includes('/notices')) return 'notices'; if (route.path.includes('/posts')) return 'posts'; return 'works' }
-function visible() { return ['/admin/members', '/admin/activities', '/admin/courses', '/admin/works', '/admin/notices', '/admin/posts'].includes(route.path) }
+function kind() { if (route.path.includes('/members')) return 'members'; if (route.path.includes('/activities')) return 'activities'; if (route.path.includes('/courses')) return 'courses'; if (route.path.includes('/notices')) return 'notices'; if (route.path.includes('/posts')) return 'posts'; if (route.path.includes('/users')) return 'users'; if (route.path.includes('/logs')) return 'logs'; return 'works' }
+function visible() { return ['/admin/members', '/admin/activities', '/admin/courses', '/admin/works', '/admin/notices', '/admin/posts', '/admin/users', '/admin/logs'].includes(route.path) }
 const config = () => configs[kind()]
 function sync() { Object.assign(draft, { keyword:String(route.query.keyword || ''), type:String(route.query.type || ''), status:String(route.query.status || ''), danceType:String(route.query.danceType || '') }) }
 function search() { router.replace({ query: Object.fromEntries(Object.entries(draft).filter(([, value]) => value)) }) }

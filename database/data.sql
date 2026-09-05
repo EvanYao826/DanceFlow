@@ -12,6 +12,13 @@ VALUES
     ('admin:permission:view', '权限管理', 'BUTTON', '/api/admin/permissions')
 ON DUPLICATE KEY UPDATE permission_name = VALUES(permission_name), updated_at = CURRENT_TIMESTAMP;
 
+INSERT INTO sys_dict (dict_type, dict_label, dict_value, sort_no)
+VALUES ('DANCE_TYPE', 'Hip-hop', 'Hip-hop', 1), ('DANCE_TYPE', 'Jazz Funk', 'Jazz Funk', 2),
+       ('DANCE_TYPE', 'Breaking', 'Breaking', 3), ('DANCE_TYPE', 'K-pop', 'K-pop', 4),
+       ('COURSE_DIFFICULTY', '入门', 'BEGINNER', 1), ('COURSE_DIFFICULTY', '进阶', 'INTERMEDIATE', 2),
+       ('COURSE_DIFFICULTY', '高级', 'ADVANCED', 3)
+ON DUPLICATE KEY UPDATE dict_label = VALUES(dict_label), sort_no = VALUES(sort_no), status = 1;
+
 INSERT IGNORE INTO sys_role_permission (role_id, permission_id)
 SELECT r.id, p.id FROM sys_role r CROSS JOIN sys_permission p WHERE r.role_code = 'USER' AND p.permission_code = 'home:view';
 

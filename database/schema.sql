@@ -289,3 +289,32 @@ CREATE TABLE IF NOT EXISTS user_point_log (
     KEY idx_user_point_log_user (user_id, created_at),
     CONSTRAINT fk_user_point_log_user FOREIGN KEY (user_id) REFERENCES sys_user(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS operation_log (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    operator_id BIGINT NULL,
+    operator_name VARCHAR(30) NULL,
+    action VARCHAR(20) NOT NULL,
+    target_type VARCHAR(50) NULL,
+    target_id VARCHAR(50) NULL,
+    request_path VARCHAR(255) NOT NULL,
+    result VARCHAR(20) NOT NULL,
+    detail VARCHAR(500) NULL,
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    KEY idx_operation_log_created (created_at),
+    KEY idx_operation_log_operator (operator_id, created_at)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS sys_dict (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    dict_type VARCHAR(50) NOT NULL,
+    dict_label VARCHAR(100) NOT NULL,
+    dict_value VARCHAR(100) NOT NULL,
+    sort_no INT NOT NULL DEFAULT 0,
+    status TINYINT NOT NULL DEFAULT 1,
+    is_deleted TINYINT NOT NULL DEFAULT 0,
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    UNIQUE KEY uk_sys_dict_value (dict_type, dict_value),
+    KEY idx_sys_dict_type (dict_type, status, sort_no)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

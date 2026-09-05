@@ -30,6 +30,7 @@ const router = createRouter({
       meta: { title: '管理端', requiresAuth: true, requiresAdmin: true, portal: 'admin' },
       children: [
         { path: 'dashboard', name: 'admin', component: () => import('@/views/AdminHomeView.vue'), meta: { title: '工作台' } },
+        { path: 'users', name: 'admin-users', component: () => import('@/views/AdminUsersView.vue'), meta: { title: '用户管理' } },
         { path: 'members', name: 'admin-members', component: () => import('@/views/MemberManagementView.vue'), meta: { title: '成员审核' } },
         { path: 'activities', name: 'admin-activities', component: () => import('@/views/ActivityManagementView.vue'), meta: { title: '活动管理' } },
         { path: 'activities/new', name: 'admin-activity-new', component: () => import('@/views/ActivityEditorView.vue'), meta: { title: '新增活动' } },
@@ -39,6 +40,8 @@ const router = createRouter({
         { path: 'works/:id', name: 'admin-work-preview', component: () => import('@/views/AdminWorkPreviewView.vue'), meta: { title: '作品预览' } },
         { path: 'notices', name: 'admin-notices', component: () => import('@/views/NoticeManagementView.vue'), meta: { title: '公告管理' } },
         { path: 'posts', name: 'admin-posts', component: () => import('@/views/PostManagementView.vue'), meta: { title: '讨论管理' } },
+        { path: 'logs', name: 'admin-logs', component: () => import('@/views/AdminLogsView.vue'), meta: { title: '操作日志' } },
+        { path: 'settings', name: 'admin-settings', component: () => import('@/views/AdminSettingsView.vue'), meta: { title: '系统设置' } },
       ],
     },
     {

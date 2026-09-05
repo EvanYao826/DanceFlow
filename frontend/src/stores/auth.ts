@@ -26,6 +26,7 @@ export const useAuthStore = defineStore('auth', () => {
   const loading = ref(false)
   const isLoggedIn = computed(() => Boolean(token.value && user.value))
   const isAdmin = computed(() => ['ADMIN', 'SUPER_ADMIN'].includes(user.value?.role ?? ''))
+  const isSuperAdmin = computed(() => user.value?.role === 'SUPER_ADMIN')
 
   async function login(username: string, password: string) {
     loading.value = true
@@ -69,5 +70,5 @@ export const useAuthStore = defineStore('auth', () => {
     clearToken()
   }
 
-  return { token, user, permissions, loading, isLoggedIn, isAdmin, login, register, restore, updateProfile, logout }
+  return { token, user, permissions, loading, isLoggedIn, isAdmin, isSuperAdmin, login, register, restore, updateProfile, logout }
 })
