@@ -16,5 +16,6 @@ export const getComments = (id: string | number) => get<WorkComment[]>(`/works/$
 export const addComment = (id: string | number, payload: object) => post<WorkComment>(`/works/${id}/comments`, payload)
 export const deleteComment = (id: string | number) => del<void>(`/comments/${id}`)
 export const getAdminWorks = (params?: object) => get<PageResult<Work>>('/admin/works', params)
+export const getAdminWork = (id: string | number) => get<Work>(`/admin/works/${id}`)
 export const auditWork = (id: string | number, status: string, reason?: string) => put<Work>(`/admin/works/${id}/audit`, { status, reason })
 export async function uploadFile(file: File) { const response = await request.post<Result<{ originalName: string; url: string; storageKey: string; contentType: string; size: number }>>('/files/upload', (() => { const form = new FormData(); form.append('file', file); return form })(), { headers: { 'Content-Type': 'multipart/form-data' } }); if (response.data.code !== 200) throw new Error(response.data.message); return response.data }
