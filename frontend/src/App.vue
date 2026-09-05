@@ -109,6 +109,15 @@ router.afterEach((to, from) => {
 .admin-content .editor-title > .el-button,
 .admin-content .preview-page > .el-button,
 .admin-content .admin-page > header > .el-button { color: var(--df-primary-700) !important; }
+.user-shell .detail-content > .el-link { opacity: 1 !important; color: #7b2d91 !important; text-shadow: none; filter: none; }
+.user-shell .detail-content > .el-link::before { color: #7b2d91 !important; opacity: 1; text-shadow: none; }
+.user-shell .detail-content h1 { color: #321c3b !important; }
+.user-shell > main .detail-content h1 { color: #321c3b !important; }
+.user-shell .detail-content .el-descriptions__body,
+.user-shell .detail-content .el-descriptions__table,
+.user-shell .detail-content .el-descriptions__cell { background: #fff !important; color: #3f3544 !important; border-color: #e1d5e5 !important; }
+.user-shell .detail-content .el-descriptions__label { background: #faf7fb !important; color: #684575 !important; }
+.user-shell .detail-content .el-descriptions__content { color: #3f3544 !important; }
 .app-shell > .slide-left-enter-active, .app-shell > .slide-left-leave-active, .app-shell > .slide-right-enter-active, .app-shell > .slide-right-leave-active { transition: opacity .3s ease, transform .3s ease; }
 .slide-left-enter-from { opacity: 0; transform: translateX(42px); }.slide-left-leave-to { opacity: 0; transform: translateX(-42px); }.slide-right-enter-from { opacity: 0; transform: translateX(-42px); }.slide-right-leave-to { opacity: 0; transform: translateX(42px); }
 </style>
