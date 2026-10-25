@@ -9,7 +9,6 @@ export const getCourses = (params?: object) => get<PageResult<Course>>('/courses
 export const getCourse = (id: string) => get<Course>(`/courses/${id}`)
 export const getLesson = (courseId: string, lessonId: string) => get<LessonLearning>(`/courses/${courseId}/lessons/${lessonId}`)
 export const saveLessonProgress = (courseId: string, lessonId: string, data: { progressSeconds: number; completed?: boolean }) => put<CourseLesson>(`/courses/${courseId}/lessons/${lessonId}/progress`, data)
-export const getMyLearning = () => get<LearningCourse[]>('/courses/my')
 export const getAdminCourses = (params?: object) => get<PageResult<Course>>('/admin/courses', params)
 export const getAdminCourse = (id: string | number) => get<Course>(`/admin/courses/${id}`)
 export const createCourse = (payload: object) => post<Course>('/admin/courses', payload)
