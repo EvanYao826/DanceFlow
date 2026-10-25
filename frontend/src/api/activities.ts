@@ -24,6 +24,7 @@ export interface ActivityApply {
   activityId: number | string
   applyStatus: string
   remark?: string
+  username?: string
   applyTime: string
   nickname: string
 }
@@ -34,3 +35,4 @@ export const getActivity = (id: string) => get<Activity>(`/activities/${id}`)
 export const applyActivity = (id: string, remark?: string) => post<ActivityApply>(`/activities/${id}/apply`, { remark })
 export const cancelActivity = (id: string) => del<void>(`/activities/${id}/apply`)
 export const getMyApplications = () => get<ActivityApply[]>('/activities/my')
+export const getActivityApplications = (id: string | number) => get<ActivityApply[]>(`/admin/activities/${id}/applications`)

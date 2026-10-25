@@ -35,6 +35,7 @@ const router = createRouter({
         { path: 'activities', name: 'admin-activities', component: () => import('@/views/ActivityManagementView.vue'), meta: { title: '活动管理' } },
         { path: 'activities/new', name: 'admin-activity-new', component: () => import('@/views/ActivityEditorView.vue'), meta: { title: '新增活动' } },
         { path: 'activities/:id/edit', name: 'admin-activity-edit', component: () => import('@/views/ActivityEditorView.vue'), meta: { title: '编辑活动' } },
+        { path: 'activities/:id/applications', name: 'admin-activity-applications', component: () => import('@/views/ActivityApplicationsView.vue'), meta: { title: '报名名单' } },
         { path: 'courses', name: 'admin-courses', component: () => import('@/views/CourseManagementView.vue'), meta: { title: '课程管理' } },
         { path: 'works', name: 'admin-works', component: () => import('@/views/WorkManagementView.vue'), meta: { title: '作品审核' } },
         { path: 'works/:id', name: 'admin-work-preview', component: () => import('@/views/AdminWorkPreviewView.vue'), meta: { title: '作品预览' } },
