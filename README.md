@@ -37,6 +37,7 @@ DanceFlow 面向高校街舞社团，提供社团信息、活动报名、课程�
 - 课程管理：维护课程、章节和学习内容
 - 作品审核：审核用户发布的作品并管理公开状态
 - 用户管理：管理系统用户、角色和账号状态
+- 角色权限：查看角色与权限码配置（`sys_permission.role_code` 表驱动）
 - 操作日志：查看后台关键操作记录
 
 ## 技术栈
@@ -46,7 +47,7 @@ DanceFlow 面向高校街舞社团，提供社团信息、活动报名、课程�
 | 后端基础 | Java 17、Spring Boot 3.5.5、Maven |
 | 安全认证 | Spring Security、JWT |
 | 数据访问 | MyBatis-Plus、MySQL 8 |
-| 缓存与文档 | Redis、SpringDoc OpenAPI |
+| 缓存与文档 | Redis（登出 Token 黑名单、统计概览 60s 缓存）、SpringDoc OpenAPI |
 | 前端基础 | Vue 3、Vite、TypeScript |
 | 前端状态与路由 | Pinia、Vue Router |
 | 前端组件与请求 | Element Plus、Axios |
@@ -81,7 +82,7 @@ DanceFlow/
 │  │  ├─ entity/ dto/ vo/           # 数据模型
 │  │  ├─ config/                    # 安全、数据库及 OpenAPI 配置
 │  │  └─ exception/                 # 异常处理
-│  └─ src/main/resources/            # 配置文件和 MyBatis XML
+│  └─ src/main/resources/            # 配置文件（SQL 全部走 MyBatis-Plus 注解与 Wrapper，无 XML）
 ├─ frontend/                        # Vue 3 前端应用
 │  └─ src/
 │     ├─ api/                       # 接口请求封装
@@ -106,7 +107,7 @@ DanceFlow/
 - Maven 3.8+
 - Node.js 20+
 - MySQL 8
-- Redis
+- Redis（登出 Token 黑名单与统计缓存；未启动时应用可运行，登出退化为仅本地清态、缓存回源数据库）
 
 ### 数据库初始化
 
