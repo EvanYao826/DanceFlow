@@ -16,7 +16,7 @@ public class CommunityController {
     private final CommunityService communityService;
     public CommunityController(CommunityService communityService) { this.communityService = communityService; }
     @GetMapping("/community/posts") public Result<PageResult<ForumPostVO>> page(@RequestParam(defaultValue="1") long page,@RequestParam(defaultValue="10") long pageSize,@RequestParam(required=false) String keyword,@RequestParam(required=false) String category) { return Result.ok(communityService.publicPage(page,pageSize,keyword,category)); }
-    @GetMapping("/community/posts/{id}") public Result<ForumPostVO> detail(@PathVariable Long id) { return Result.ok(communityService.detail(id,true)); }
+    @GetMapping("/community/posts/{id}") public Result<ForumPostVO> detail(Authentication authentication, @PathVariable Long id) { AuthUser u = authentication != null && authentication.getPrincipal() instanceof AuthUser a ? a : null; return Result.ok(communityService.detail(id, u == null ? null : u.id(), u != null && admin(u))); }
     @PostMapping("/community/posts") public Result<ForumPostVO> create(Authentication auth,@Valid @RequestBody ForumPostRequest request) { return Result.ok(communityService.create(user(auth).id(),request)); }
     @PutMapping("/community/posts/{id}") public Result<ForumPostVO> update(Authentication auth,@PathVariable Long id,@Valid @RequestBody ForumPostRequest request) { AuthUser u=user(auth); return Result.ok(communityService.update(id,u.id(),admin(u),request)); }
     @DeleteMapping("/community/posts/{id}") public Result<Void> delete(Authentication auth,@PathVariable Long id) { AuthUser u=user(auth); communityService.delete(id,u.id(),admin(u)); return Result.ok(); }

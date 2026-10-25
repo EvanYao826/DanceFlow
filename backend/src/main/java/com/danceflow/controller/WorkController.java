@@ -30,7 +30,7 @@ public class WorkController {
     }
 
     @GetMapping("/works/{id}")
-    public Result<WorkVO> detail(Authentication authentication, @PathVariable Long id) { return Result.ok(workService.detail(id, userId(authentication), true)); }
+    public Result<WorkVO> detail(Authentication authentication, @PathVariable Long id) { return Result.ok(workService.detailVisible(id, userId(authentication), isAdmin(authentication))); }
     @PostMapping("/works")
     public Result<WorkVO> create(Authentication authentication, @Valid @RequestBody WorkRequest request) { return Result.ok(workService.create(currentId(authentication), request)); }
     @PutMapping("/works/{id}")

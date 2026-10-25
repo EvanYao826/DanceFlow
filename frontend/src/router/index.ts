@@ -57,6 +57,12 @@ const router = createRouter({
       meta: { title: '发布讨论', requiresAuth: true, portal: 'user' },
     },
     {
+      path: '/community/posts/:id/edit',
+      name: 'community-post-edit',
+      component: () => import('@/views/CommunityPostEditorView.vue'),
+      meta: { title: '编辑讨论', requiresAuth: true, portal: 'user' },
+    },
+    {
       path: '/community/posts/:id',
       name: 'community-post-detail',
       component: () => import('@/views/CommunityPostDetailView.vue'),
@@ -109,6 +115,12 @@ const router = createRouter({
       name: 'work-create',
       component: () => import('@/views/WorkCreateView.vue'),
       meta: { title: '发布作品', requiresAuth: true, portal: 'user' },
+    },
+    {
+      path: '/works/:id/edit',
+      name: 'work-edit',
+      component: () => import('@/views/WorkCreateView.vue'),
+      meta: { title: '编辑作品', requiresAuth: true, portal: 'user' },
     },
     {
       path: '/works/:id',

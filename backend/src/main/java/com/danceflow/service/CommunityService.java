@@ -31,6 +31,8 @@ public class CommunityService {
         return new PageResult<>(result.getRecords().stream().map(this::vo).toList(), result.getTotal(), result.getCurrent(), result.getSize());
     }
     @Transactional public ForumPostVO detail(Long id, boolean publicOnly) { ForumPost post = required(id); if (publicOnly && !"PUBLISHED".equals(post.getStatus())) throw new BusinessException(ResultCode.NOT_FOUND.getCode(), "帖子不存在"); post.setViewCount((post.getViewCount() == null ? 0 : post.getViewCount()) + 1); postMapper.updateById(post); return vo(post); }
+    /** 作者或管理员可查看非公开帖子（用于编辑回填），其余人只看已发布且计数浏览量。 */
+    public ForumPostVO detail(Long id, Long userId, boolean admin) { ForumPost post = required(id); return detail(id, !(admin || post.getUserId().equals(userId))); }
     @Transactional public ForumPostVO create(Long userId, ForumPostRequest request) { ForumPost post = new ForumPost(); copy(post, request); post.setUserId(userId); post.setStatus("PUBLISHED"); post.setViewCount(0); post.setLikeCount(0); post.setIsDeleted(0); postMapper.insert(post); pointService.grantOnce(userId, "FORUM_POST", 5, "FORUM_POST", post.getId(), "发布帖子：" + post.getTitle()); return vo(post); }
     @Transactional public ForumPostVO update(Long id, Long userId, boolean admin, ForumPostRequest request) { ForumPost post = required(id); checkOwner(post, userId, admin); copy(post, request); postMapper.updateById(post); return vo(post); }
     @Transactional public void delete(Long id, Long userId, boolean admin) { ForumPost post = required(id); checkOwner(post, userId, admin); post.setIsDeleted(1); postMapper.updateById(post); }

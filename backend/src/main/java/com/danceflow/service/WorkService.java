@@ -79,6 +79,12 @@ public class WorkService {
         return toVO(work, userId);
     }
 
+    /** 作者或管理员可查看未发布作品（用于编辑回填），其余人只看已发布且计数浏览量。 */
+    public WorkVO detailVisible(Long id, Long userId, boolean admin) {
+        DanceWork work = required(id);
+        return detail(id, userId, !(admin || work.getUserId().equals(userId)));
+    }
+
     @Transactional public WorkVO update(Long id, Long userId, boolean admin, WorkRequest request) {
         DanceWork work = required(id); checkOwner(work, userId, admin); copy(work, request); work.setMediaType(request.mediaType().toUpperCase());
         if (!admin) { work.setAuditStatus("PENDING"); work.setAuditReason(null); work.setPublishedTime(null); }
