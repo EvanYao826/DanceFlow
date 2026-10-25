@@ -1,6 +1,6 @@
 import { computed, ref } from 'vue'
 import { defineStore } from 'pinia'
-import { clearToken, get, getToken, post, put, setToken } from '@/api/request'
+import request, { clearToken, get, getToken, post, put, setToken } from '@/api/request'
 
 export interface UserInfo {
   id: number | string
@@ -63,11 +63,20 @@ export const useAuthStore = defineStore('auth', () => {
     user.value = result.data
   }
 
-  function logout() {
+  async function logout() {
+    const oldToken = getToken()
     token.value = null
     user.value = null
     permissions.value = []
     clearToken()
+    if (oldToken) {
+      // 通知后端拉黑旧 Token（本地已清除，需显式携带）；失败不阻塞登出
+      try {
+        await request.post('/auth/logout', null, { headers: { Authorization: `Bearer ${oldToken}` } })
+      } catch {
+        /* 后端不可达时旧 Token 依赖自然过期兜底 */
+      }
+    }
   }
 
   return { token, user, permissions, loading, isLoggedIn, isAdmin, isSuperAdmin, login, register, restore, updateProfile, logout }

@@ -13,12 +13,15 @@ import com.danceflow.mapper.PermissionMapper;
 import com.danceflow.mapper.UserMapper;
 import com.danceflow.security.AuthUser;
 import com.danceflow.security.JwtService;
+import com.danceflow.security.TokenBlacklistService;
 import com.danceflow.vo.LoginVO;
 import com.danceflow.vo.UserVO;
+import io.jsonwebtoken.Claims;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -28,13 +31,34 @@ public class AuthService {
     private final PermissionMapper permissionMapper;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
+    private final TokenBlacklistService tokenBlacklistService;
 
     public AuthService(UserMapper userMapper, PermissionMapper permissionMapper,
-                       PasswordEncoder passwordEncoder, JwtService jwtService) {
+                       PasswordEncoder passwordEncoder, JwtService jwtService,
+                       TokenBlacklistService tokenBlacklistService) {
         this.userMapper = userMapper;
         this.permissionMapper = permissionMapper;
         this.passwordEncoder = passwordEncoder;
         this.jwtService = jwtService;
+        this.tokenBlacklistService = tokenBlacklistService;
+    }
+
+    /**
+     * 登出：把当前 Token 的 jti 写入 Redis 黑名单，TTL 为剩余有效期；无效 Token 直接忽略。
+     */
+    public void logout(String authHeader) {
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            return;
+        }
+        try {
+            Claims claims = jwtService.parse(authHeader.substring(7));
+            long remainingMillis = claims.getExpiration().getTime() - System.currentTimeMillis();
+            if (remainingMillis > 0) {
+                tokenBlacklistService.ban(claims.getId(), Duration.ofMillis(remainingMillis));
+            }
+        } catch (Exception ignored) {
+            // 已过期或伪造的 Token 无需拉黑
+        }
     }
 
     @Transactional

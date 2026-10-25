@@ -14,6 +14,11 @@ spring:
     multipart:
       max-file-size: 100MB
       max-request-size: 100MB
+  cache:
+    type: redis
+    redis:
+      # 统计概览等热点数据缓存时长
+      time-to-live: 60s
 
 mybatis-plus:
   mapper-locations: classpath*:mapper/**/*.xml

@@ -3,6 +3,7 @@ package com.danceflow.service;
 import com.danceflow.vo.StatisticsOverviewVO;
 import com.danceflow.vo.StatisticsRankingVO;
 import com.danceflow.vo.StatisticsTrendVO;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +16,7 @@ import java.util.Map;
 public class StatisticsService {
     private final JdbcTemplate jdbc;
     public StatisticsService(JdbcTemplate jdbc) { this.jdbc = jdbc; }
+    @Cacheable(cacheNames = "statistics:overview")
     public StatisticsOverviewVO overview() { return new StatisticsOverviewVO(count("sys_user"), count("club_member", "member_status = 'ACTIVE'"), count("activity"), count("course"), count("dance_work"), count("forum_post"), count("work_comment"), count("activity_apply", "apply_status = 'APPLIED'")); }
     public List<StatisticsTrendVO> userTrend(LocalDate start, LocalDate end) { return trend("SELECT DATE(created_at) day, COUNT(*) value FROM sys_user WHERE is_deleted = 0 AND created_at >= ? AND created_at < ? GROUP BY DATE(created_at) ORDER BY day", start, end); }
     public Map<String, Object> activity(LocalDate start, LocalDate end) { Map<String, Object> result = new LinkedHashMap<>(); result.put("published", scalar("SELECT COUNT(*) FROM activity WHERE status = 'PUBLISHED' AND created_at >= ? AND created_at < ?", start, end)); result.put("applications", scalar("SELECT COUNT(*) FROM activity_apply WHERE apply_status = 'APPLIED' AND apply_time >= ? AND apply_time < ?", start, end)); result.put("finished", scalar("SELECT COUNT(*) FROM activity WHERE status = 'FINISHED' AND updated_at >= ? AND updated_at < ?", start, end)); return result; }
