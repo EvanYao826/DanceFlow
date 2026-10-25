@@ -1,4 +1,4 @@
-import { get } from '@/api/request'
+import { get, put } from '@/api/request'
 import type { Activity, PageResult } from '@/api/activities'
 import type { LearningCourse } from '@/api/courses'
 import type { Work } from '@/api/works'
@@ -9,3 +9,4 @@ export const getProfileActivities = (params?: object) => get<PageResult<Activity
 export const getProfileCourses = (params?: object) => get<PageResult<LearningCourse>>('/users/me/courses', params)
 export const getCollections = (params?: object) => get<PageResult<Work>>('/users/me/collections', params)
 export const getPoints = (params?: object) => get<PageResult<PointLog>>('/users/me/points', params)
+export const changePassword = (payload: { oldPassword: string; newPassword: string; confirmPassword: string }) => put<void>('/users/me/password', payload)
