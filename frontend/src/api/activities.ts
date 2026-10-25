@@ -29,7 +29,7 @@ export interface ActivityApply {
 }
 
 export interface PageResult<T> { records: T[]; total: number; page: number; pageSize: number }
-export const getActivities = (page = 1, pageSize = 12) => get<PageResult<Activity>>('/activities', { page, pageSize })
+export const getActivities = (page = 1, pageSize = 12, activityType?: string) => get<PageResult<Activity>>('/activities', { page, pageSize, activityType })
 export const getActivity = (id: string) => get<Activity>(`/activities/${id}`)
 export const applyActivity = (id: string, remark?: string) => post<ActivityApply>(`/activities/${id}/apply`, { remark })
 export const cancelActivity = (id: string) => del<void>(`/activities/${id}/apply`)

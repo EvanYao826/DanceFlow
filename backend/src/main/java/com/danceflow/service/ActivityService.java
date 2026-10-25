@@ -31,9 +31,11 @@ public class ActivityService {
         this.applyMapper = applyMapper;
     }
 
-    public PageResult<ActivityVO> publicPage(long page, long pageSize) {
+    public PageResult<ActivityVO> publicPage(long page, long pageSize, String activityType) {
         Page<Activity> result = activityMapper.selectPage(new Page<>(Math.max(page, 1), Math.min(Math.max(pageSize, 1), 100)),
-                new LambdaQueryWrapper<Activity>().eq(Activity::getStatus, "PUBLISHED").orderByAsc(Activity::getStartTime));
+                new LambdaQueryWrapper<Activity>().eq(Activity::getStatus, "PUBLISHED")
+                        .eq(activityType != null && !activityType.isBlank(), Activity::getActivityType, activityType)
+                        .orderByAsc(Activity::getStartTime));
         return new PageResult<>(result.getRecords().stream().map(this::toVO).toList(), result.getTotal(), result.getCurrent(), result.getSize());
     }
 

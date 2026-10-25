@@ -23,8 +23,9 @@ public class ActivityController {
     public ActivityController(ActivityService activityService, ActivityApplyService applyService) { this.activityService = activityService; this.applyService = applyService; }
 
     @GetMapping("/activities")
-    public Result<PageResult<ActivityVO>> page(@RequestParam(defaultValue = "1") long page, @RequestParam(defaultValue = "10") long pageSize) {
-        return Result.ok(activityService.publicPage(page, pageSize));
+    public Result<PageResult<ActivityVO>> page(@RequestParam(defaultValue = "1") long page, @RequestParam(defaultValue = "10") long pageSize,
+                                               @RequestParam(required = false) String activityType) {
+        return Result.ok(activityService.publicPage(page, pageSize, activityType));
     }
 
     @GetMapping("/activities/{id}")

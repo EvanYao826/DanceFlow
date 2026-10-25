@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import { getActivities, type Activity } from '@/api/activities'
 import { useRouter } from 'vue-router'
 import danceImageOne from '@/assets/dance1.png'
@@ -11,19 +11,19 @@ const total = ref(0)
 const page = ref(1)
 const loading = ref(false)
 const typeFilter = ref('全部')
-const visibleRecords = computed(() => typeFilter.value === '全部' ? records.value : records.value.filter(item => item.activityType === typeFilter.value))
-const typeOptions = computed(() => ['全部', ...new Set(records.value.map(item => item.activityType))])
+const typeOptions = ['全部', '训练课', '社团活动', '成果展示', '比赛']
 const router = useRouter()
 const danceImages = [danceImageOne, danceImageTwo, danceImageThree]
-async function load() { loading.value = true; try { const result = await getActivities(page.value); records.value = result.data.records; total.value = result.data.total } finally { loading.value = false } }
+async function load(next = page.value) { loading.value = true; page.value = next; try { const result = await getActivities(page.value, 12, typeFilter.value === '全部' ? '' : typeFilter.value); records.value = result.data.records; total.value = result.data.total } finally { loading.value = false } }
 onMounted(load)
+function changeType() { load(1) }
 function formatTime(value: string) { return value?.replace('T', ' ').slice(0, 16) }
 </script>
 
 <template>
   <main class="activities-page"><UserTopbar />
-    <section class="heading"><p class="eyebrow">UPCOMING EVENTS</p><h1>社团活动</h1><p>训练、交流和舞台，总有一场活动适合你。</p><el-segmented v-model="typeFilter" :options="typeOptions" class="filter" /></section>
-    <section class="activity-grid" v-loading="loading"><el-empty v-if="!loading && !visibleRecords.length" description="暂无已发布活动" /><el-card v-for="(item, index) in visibleRecords" :key="item.id" class="activity-card" shadow="hover" @click="router.push(`/activities/${item.id}`)"><div class="cover"><img :src="danceImages[index % danceImages.length]" alt="" /><span>{{ item.activityType }}</span></div><div class="card-body"><div class="card-meta">{{ formatTime(item.startTime) }} · {{ item.location }}</div><h2>{{ item.title }}</h2><p>{{ item.description || '期待在活动现场与你相见。' }}</p><div class="card-footer"><el-tag effect="plain">剩余 {{ item.remainingCapacity ?? item.capacity }} 人</el-tag><el-button link type="primary">查看详情 →</el-button></div></div></el-card></section>
+    <section class="heading"><p class="eyebrow">UPCOMING EVENTS</p><h1>社团活动</h1><p>训练、交流和舞台，总有一场活动适合你。</p><el-segmented v-model="typeFilter" :options="typeOptions" class="filter" @change="changeType" /></section>
+    <section class="activity-grid" v-loading="loading"><el-empty v-if="!loading && !records.length" description="暂无已发布活动" /><el-card v-for="(item, index) in records" :key="item.id" class="activity-card" shadow="hover" @click="router.push(`/activities/${item.id}`)"><div class="cover"><img :src="danceImages[index % danceImages.length]" alt="" /><span>{{ item.activityType }}</span></div><div class="card-body"><div class="card-meta">{{ formatTime(item.startTime) }} · {{ item.location }}</div><h2>{{ item.title }}</h2><p>{{ item.description || '期待在活动现场与你相见。' }}</p><div class="card-footer"><el-tag effect="plain">剩余 {{ item.remainingCapacity ?? item.capacity }} 人</el-tag><el-button link type="primary">查看详情 →</el-button></div></div></el-card></section>
     <el-pagination v-if="total" v-model:current-page="page" layout="prev, pager, next" :page-size="12" :total="total" @current-change="load" />
   </main>
 </template>
