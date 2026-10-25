@@ -57,8 +57,10 @@ public class ActivityController {
     }
 
     @GetMapping("/admin/activities")
-    public Result<PageResult<ActivityVO>> adminPage(@RequestParam(defaultValue = "1") long page, @RequestParam(defaultValue = "10") long pageSize) {
-        return Result.ok(activityService.adminPage(page, pageSize));
+    public Result<PageResult<ActivityVO>> adminPage(@RequestParam(defaultValue = "1") long page, @RequestParam(defaultValue = "10") long pageSize,
+                                                    @RequestParam(required = false) String keyword, @RequestParam(required = false) String activityType,
+                                                    @RequestParam(required = false) String status) {
+        return Result.ok(activityService.adminPage(page, pageSize, keyword, activityType, status));
     }
 
     @PostMapping("/admin/activities")

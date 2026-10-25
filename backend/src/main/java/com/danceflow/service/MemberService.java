@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Service
 public class MemberService {
@@ -50,9 +51,18 @@ public class MemberService {
         return toVO(member);
     }
 
-    public PageResult<MemberVO> page(long page, long pageSize) {
+    public PageResult<MemberVO> page(long page, long pageSize, String keyword, String danceType, String status) {
+        List<Long> userIds = keyword != null && !keyword.isBlank()
+                ? userMapper.selectList(new LambdaQueryWrapper<User>()
+                        .and(q -> q.like(User::getNickname, keyword).or().like(User::getUsername, keyword)))
+                        .stream().map(User::getId).toList()
+                : List.of();
         Page<ClubMember> result = memberMapper.selectPage(new Page<>(Math.max(page, 1), Math.min(Math.max(pageSize, 1), 100)),
-                new LambdaQueryWrapper<ClubMember>().orderByDesc(ClubMember::getCreatedAt));
+                new LambdaQueryWrapper<ClubMember>()
+                        .and(keyword != null && !keyword.isBlank(), q -> { if (!userIds.isEmpty()) q.in(ClubMember::getUserId, userIds); else q.apply("1 = 0"); })
+                        .eq(danceType != null && !danceType.isBlank(), ClubMember::getDanceType, danceType)
+                        .eq(status != null && !status.isBlank(), ClubMember::getMemberStatus, status)
+                        .orderByDesc(ClubMember::getCreatedAt));
         return new PageResult<>(result.getRecords().stream().map(this::toVO).toList(), result.getTotal(), result.getCurrent(), result.getSize());
     }
 

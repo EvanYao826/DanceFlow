@@ -18,7 +18,7 @@ public class NoticeController {
     public NoticeController(NoticeService noticeService) { this.noticeService = noticeService; }
     @GetMapping("/notices") public Result<List<NoticeVO>> list() { return Result.ok(noticeService.publicList()); }
     @GetMapping("/notices/{id}") public Result<NoticeVO> detail(@PathVariable Long id) { return Result.ok(noticeService.publicDetail(id)); }
-    @GetMapping("/admin/notices") public Result<PageResult<NoticeVO>> page(@RequestParam(defaultValue="1") long page,@RequestParam(defaultValue="10") long pageSize,@RequestParam(required=false) String status) { return Result.ok(noticeService.adminPage(page,pageSize,status)); }
+    @GetMapping("/admin/notices") public Result<PageResult<NoticeVO>> page(@RequestParam(defaultValue="1") long page,@RequestParam(defaultValue="10") long pageSize,@RequestParam(required=false) String keyword,@RequestParam(required=false) String status) { return Result.ok(noticeService.adminPage(page,pageSize,keyword,status)); }
     @PostMapping("/admin/notices") public Result<NoticeVO> create(Authentication auth,@Valid @RequestBody NoticeRequest request) { return Result.ok(noticeService.create(((AuthUser)auth.getPrincipal()).id(),request)); }
     @PutMapping("/admin/notices/{id}") public Result<NoticeVO> update(@PathVariable Long id,@Valid @RequestBody NoticeRequest request) { return Result.ok(noticeService.update(id,request)); }
     @PutMapping("/admin/notices/{id}/status") public Result<NoticeVO> status(@PathVariable Long id,@Valid @RequestBody NoticeStatusRequest request) { return Result.ok(noticeService.updateStatus(id,request)); }

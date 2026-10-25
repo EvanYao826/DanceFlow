@@ -42,8 +42,16 @@ public class WorkService {
         return new PageResult<>(result.getRecords().stream().map(w -> toVO(w, userId)).toList(), result.getTotal(), result.getCurrent(), result.getSize());
     }
 
-    public PageResult<WorkVO> adminPage(long page, long pageSize, String status) {
+    public PageResult<WorkVO> adminPage(long page, long pageSize, String keyword, String danceType, String status) {
+        List<Long> authorIds = keyword != null && !keyword.isBlank()
+                ? userMapper.selectList(new LambdaQueryWrapper<User>().like(User::getNickname, keyword)).stream().map(User::getId).toList()
+                : List.of();
         LambdaQueryWrapper<DanceWork> query = new LambdaQueryWrapper<DanceWork>().eq(DanceWork::getIsDeleted, 0)
+                .and(keyword != null && !keyword.isBlank(), q -> {
+                    q.like(DanceWork::getTitle, keyword);
+                    if (!authorIds.isEmpty()) q.or().in(DanceWork::getUserId, authorIds);
+                })
+                .eq(danceType != null && !danceType.isBlank(), DanceWork::getDanceType, danceType)
                 .eq(status != null && !status.isBlank(), DanceWork::getAuditStatus, status).orderByDesc(DanceWork::getCreatedAt);
         Page<DanceWork> result = workMapper.selectPage(new Page<>(Math.max(page, 1), Math.min(Math.max(pageSize, 1), 100)), query);
         return new PageResult<>(result.getRecords().stream().map(w -> toVO(w, null)).toList(), result.getTotal(), result.getCurrent(), result.getSize());

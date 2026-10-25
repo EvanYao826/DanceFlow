@@ -56,8 +56,9 @@ public class CourseController {
 
     @GetMapping("/admin/courses")
     public Result<PageResult<CourseVO>> adminPage(@RequestParam(defaultValue = "1") long page, @RequestParam(defaultValue = "10") long pageSize,
-                                                  @RequestParam(required = false) String keyword, @RequestParam(required = false) String status) {
-        return Result.ok(courseService.adminPage(page, pageSize, keyword, status));
+                                                  @RequestParam(required = false) String keyword, @RequestParam(required = false) String danceType,
+                                                  @RequestParam(required = false) String status) {
+        return Result.ok(courseService.adminPage(page, pageSize, keyword, danceType, status));
     }
 
     @GetMapping("/admin/courses/{id}")

@@ -37,9 +37,13 @@ public class ActivityService {
         return new PageResult<>(result.getRecords().stream().map(this::toVO).toList(), result.getTotal(), result.getCurrent(), result.getSize());
     }
 
-    public PageResult<ActivityVO> adminPage(long page, long pageSize) {
+    public PageResult<ActivityVO> adminPage(long page, long pageSize, String keyword, String activityType, String status) {
         Page<Activity> result = activityMapper.selectPage(new Page<>(Math.max(page, 1), Math.min(Math.max(pageSize, 1), 100)),
-                new LambdaQueryWrapper<Activity>().orderByDesc(Activity::getCreatedAt));
+                new LambdaQueryWrapper<Activity>()
+                        .and(keyword != null && !keyword.isBlank(), q -> q.like(Activity::getTitle, keyword).or().like(Activity::getLocation, keyword))
+                        .eq(activityType != null && !activityType.isBlank(), Activity::getActivityType, activityType)
+                        .eq(status != null && !status.isBlank(), Activity::getStatus, status)
+                        .orderByDesc(Activity::getCreatedAt));
         return new PageResult<>(result.getRecords().stream().map(this::toVO).toList(), result.getTotal(), result.getCurrent(), result.getSize());
     }
 

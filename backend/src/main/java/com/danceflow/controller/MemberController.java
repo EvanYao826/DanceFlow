@@ -35,8 +35,10 @@ public class MemberController {
 
     @GetMapping
     @PreAuthorize("hasAnyRole('ADMIN', 'SUPER_ADMIN')")
-    public Result<PageResult<MemberVO>> page(@RequestParam(defaultValue = "1") long page, @RequestParam(defaultValue = "10") long pageSize) {
-        return Result.ok(memberService.page(page, pageSize));
+    public Result<PageResult<MemberVO>> page(@RequestParam(defaultValue = "1") long page, @RequestParam(defaultValue = "10") long pageSize,
+                                             @RequestParam(required = false) String keyword, @RequestParam(required = false) String danceType,
+                                             @RequestParam(required = false) String status) {
+        return Result.ok(memberService.page(page, pageSize, keyword, danceType, status));
     }
 
     @GetMapping("/{id}")

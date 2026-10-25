@@ -51,7 +51,9 @@ public class WorkController {
     public Result<Void> deleteComment(Authentication authentication, @PathVariable Long id) { workService.deleteComment(id, currentId(authentication), isAdmin(authentication)); return Result.ok(); }
 
     @GetMapping("/admin/works")
-    public Result<PageResult<WorkVO>> adminPage(@RequestParam(defaultValue = "1") long page, @RequestParam(defaultValue = "12") long pageSize, @RequestParam(required = false) String status) { return Result.ok(workService.adminPage(page, pageSize, status)); }
+    public Result<PageResult<WorkVO>> adminPage(@RequestParam(defaultValue = "1") long page, @RequestParam(defaultValue = "12") long pageSize,
+                                                @RequestParam(required = false) String keyword, @RequestParam(required = false) String danceType,
+                                                @RequestParam(required = false) String status) { return Result.ok(workService.adminPage(page, pageSize, keyword, danceType, status)); }
     @GetMapping("/admin/works/{id}")
     public Result<WorkVO> adminDetail(@PathVariable Long id) { return Result.ok(workService.detail(id, null, false)); }
     @PutMapping("/admin/works/{id}/audit")

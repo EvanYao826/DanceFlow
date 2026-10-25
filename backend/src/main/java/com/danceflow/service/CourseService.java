@@ -50,9 +50,10 @@ public class CourseService {
         return new PageResult<>(result.getRecords().stream().map(CourseVO::summary).toList(), result.getTotal(), result.getCurrent(), result.getSize());
     }
 
-    public PageResult<CourseVO> adminPage(long page, long pageSize, String keyword, String status) {
+    public PageResult<CourseVO> adminPage(long page, long pageSize, String keyword, String danceType, String status) {
         LambdaQueryWrapper<Course> query = new LambdaQueryWrapper<Course>().eq(Course::getIsDeleted, 0)
-                .like(keyword != null && !keyword.isBlank(), Course::getTitle, keyword)
+                .and(keyword != null && !keyword.isBlank(), q -> q.like(Course::getTitle, keyword).or().like(Course::getTeacherName, keyword))
+                .eq(danceType != null && !danceType.isBlank(), Course::getDanceType, danceType)
                 .eq(status != null && !status.isBlank(), Course::getStatus, status)
                 .orderByAsc(Course::getSortNo).orderByDesc(Course::getCreatedAt);
         Page<Course> result = courseMapper.selectPage(new Page<>(safePage(page), safePageSize(pageSize)), query);
