@@ -16,6 +16,7 @@ const items = [
   { label: '作品审核', path: '/admin/works' },
   { label: '公告管理', path: '/admin/notices' },
   { label: '讨论管理', path: '/admin/posts' },
+  { label: '角色权限', path: '/admin/roles' },
   { label: '操作日志', path: '/admin/logs' },
 ]
 const activePath = computed(() => route.path)

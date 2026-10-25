@@ -3,6 +3,10 @@ import type { Activity, PageResult } from '@/api/activities'
 import type { MemberProfile } from '@/api/club'
 export interface AdminUser { id: number; username: string; nickname: string; avatar?: string; phone?: string; email?: string; role: string; status: number; lastLoginTime?: string; createdAt?: string }
 export interface OperationLog { id: number; operatorName?: string; action: string; targetType?: string; targetId?: string; requestPath: string; result: string; detail?: string; createdAt?: string }
+export interface RoleItem { id: number; roleCode: string; roleName: string; status: number }
+export interface PermissionItem { id: number; permissionCode: string; permissionName: string; roleCode: string; type: string; path?: string; status: number }
+export const getRoles = () => get<RoleItem[]>('/admin/roles')
+export const getPermissions = () => get<PermissionItem[]>('/admin/permissions')
 export const getAdminUsers = (params?: object) => get<PageResult<AdminUser>>('/admin/users', params)
 export const updateAdminUserStatus = (id: string | number, status: number) => put<AdminUser>(`/admin/users/${id}/status`, { status })
 export const updateAdminUserRole = (id: string | number, role: string) => put<AdminUser>(`/admin/users/${id}/roles`, { role })

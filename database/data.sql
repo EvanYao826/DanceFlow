@@ -4,13 +4,13 @@ INSERT INTO sys_role (role_code, role_name)
 VALUES ('USER', '普通用户'), ('ADMIN', '管理员'), ('SUPER_ADMIN', '超级管理员')
 ON DUPLICATE KEY UPDATE role_name = VALUES(role_name), updated_at = CURRENT_TIMESTAMP;
 
-INSERT INTO sys_permission (permission_code, permission_name, type, path)
+INSERT INTO sys_permission (permission_code, permission_name, role_code, type, path)
 VALUES
-    ('home:view', '首页', 'MENU', '/'),
-    ('admin:view', '管理端', 'MENU', '/admin'),
-    ('admin:role:view', '角色管理', 'BUTTON', '/api/admin/roles'),
-    ('admin:permission:view', '权限管理', 'BUTTON', '/api/admin/permissions')
-ON DUPLICATE KEY UPDATE permission_name = VALUES(permission_name), updated_at = CURRENT_TIMESTAMP;
+    ('home:view', '首页', 'USER', 'MENU', '/'),
+    ('admin:view', '管理端', 'ADMIN', 'MENU', '/admin'),
+    ('admin:role:view', '角色管理', 'ADMIN', 'BUTTON', '/api/admin/roles'),
+    ('admin:permission:view', '权限管理', 'ADMIN', 'BUTTON', '/api/admin/permissions')
+ON DUPLICATE KEY UPDATE permission_name = VALUES(permission_name), role_code = VALUES(role_code), updated_at = CURRENT_TIMESTAMP;
 
 INSERT INTO sys_dict (dict_type, dict_label, dict_value, sort_no)
 VALUES ('DANCE_TYPE', 'Hip-hop', 'Hip-hop', 1), ('DANCE_TYPE', 'Jazz Funk', 'Jazz Funk', 2),
@@ -19,12 +19,6 @@ VALUES ('DANCE_TYPE', 'Hip-hop', 'Hip-hop', 1), ('DANCE_TYPE', 'Jazz Funk', 'Jaz
        ('COURSE_DIFFICULTY', '高级', 'ADVANCED', 3)
 ON DUPLICATE KEY UPDATE dict_label = VALUES(dict_label), sort_no = VALUES(sort_no), status = 1;
 
-INSERT IGNORE INTO sys_role_permission (role_id, permission_id)
-SELECT r.id, p.id FROM sys_role r CROSS JOIN sys_permission p WHERE r.role_code = 'USER' AND p.permission_code = 'home:view';
-
-INSERT IGNORE INTO sys_role_permission (role_id, permission_id)
-SELECT r.id, p.id FROM sys_role r CROSS JOIN sys_permission p WHERE r.role_code IN ('ADMIN', 'SUPER_ADMIN') AND p.permission_code IN ('home:view', 'admin:view', 'admin:role:view', 'admin:permission:view');
-
 -- 演示账号：密码均为 password，生产环境禁止使用这些账号。
 INSERT INTO sys_user (username, password, nickname, email, role, status)
 VALUES
@@ -32,10 +26,6 @@ VALUES
     ('dance_demo', '$2a$10$wj6vENfaaG4cudegsK9ome/5nSmb.bSTOYpApRBUTaUDRusc8Iu7a', '街舞同学', 'dance@danceflow.local', 'USER', 1),
     ('member_demo', '$2a$10$wj6vENfaaG4cudegsK9ome/5nSmb.bSTOYpApRBUTaUDRusc8Iu7a', 'Flow 舞者', 'member@danceflow.local', 'USER', 1)
 ON DUPLICATE KEY UPDATE nickname = VALUES(nickname), email = VALUES(email), role = VALUES(role), status = 1;
-
-INSERT IGNORE INTO sys_user_role (user_id, role_id)
-SELECT u.id, r.id FROM sys_user u JOIN sys_role r ON r.role_code = u.role
-WHERE u.username IN ('admin_demo', 'dance_demo', 'member_demo');
 
 INSERT INTO club_member (user_id, dance_type, skill_level, join_date, member_status, bio)
 SELECT u.id, 'Hip-hop', 'INTERMEDIATE', CURRENT_DATE, 'ACTIVE', '喜欢律动和团队训练，期待在舞台上见。'

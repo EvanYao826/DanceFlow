@@ -34,6 +34,7 @@ CREATE TABLE IF NOT EXISTS sys_permission (
     id BIGINT PRIMARY KEY AUTO_INCREMENT,
     permission_code VARCHAR(80) NOT NULL,
     permission_name VARCHAR(50) NOT NULL,
+    role_code VARCHAR(30) NOT NULL DEFAULT 'USER' COMMENT '授予该权限的最低角色：USER/ADMIN/SUPER_ADMIN，高级角色自动继承',
     type VARCHAR(20) NOT NULL DEFAULT 'MENU',
     parent_id BIGINT NOT NULL DEFAULT 0,
     path VARCHAR(200) NULL,
@@ -42,22 +43,6 @@ CREATE TABLE IF NOT EXISTS sys_permission (
     created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     UNIQUE KEY uk_sys_permission_code (permission_code)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
-CREATE TABLE IF NOT EXISTS sys_user_role (
-    user_id BIGINT NOT NULL,
-    role_id BIGINT NOT NULL,
-    PRIMARY KEY (user_id, role_id),
-    CONSTRAINT fk_user_role_user FOREIGN KEY (user_id) REFERENCES sys_user(id),
-    CONSTRAINT fk_user_role_role FOREIGN KEY (role_id) REFERENCES sys_role(id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
-CREATE TABLE IF NOT EXISTS sys_role_permission (
-    role_id BIGINT NOT NULL,
-    permission_id BIGINT NOT NULL,
-    PRIMARY KEY (role_id, permission_id),
-    CONSTRAINT fk_role_permission_role FOREIGN KEY (role_id) REFERENCES sys_role(id),
-    CONSTRAINT fk_role_permission_permission FOREIGN KEY (permission_id) REFERENCES sys_permission(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE IF NOT EXISTS club_member (
@@ -318,3 +303,8 @@ CREATE TABLE IF NOT EXISTS sys_dict (
     UNIQUE KEY uk_sys_dict_value (dict_type, dict_value),
     KEY idx_sys_dict_type (dict_type, status, sort_no)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- 存量库升级（RBAC 简化为“单角色 + 权限码表驱动”）：在旧库上手动执行后再重跑 data.sql
+-- ALTER TABLE sys_permission ADD COLUMN role_code VARCHAR(30) NOT NULL DEFAULT 'USER' COMMENT '授予该权限的最低角色' AFTER permission_name;
+-- DROP TABLE IF EXISTS sys_user_role;
+-- DROP TABLE IF EXISTS sys_role_permission;

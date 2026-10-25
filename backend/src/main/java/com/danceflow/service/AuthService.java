@@ -126,13 +126,15 @@ public class AuthService {
         userMapper.updateById(user);
     }
 
+    /** 角色等级：高级角色自动继承低级角色的权限码（sys_permission.role_code 表驱动）。 */
+    private static final List<String> ROLE_ORDER = List.of("USER", "ADMIN", "SUPER_ADMIN");
+
     public List<String> permissions(String role) {
-        if ("SUPER_ADMIN".equals(role)) {
-            return permissionMapper.selectList(new LambdaQueryWrapper<Permission>().eq(Permission::getStatus, 1))
-                    .stream().map(Permission::getPermissionCode).toList();
-        }
-        return permissionMapper.selectList(new LambdaQueryWrapper<Permission>().eq(Permission::getStatus, 1)
-                        .in(Permission::getPermissionCode, "home:view", "ADMIN".equals(role) ? "admin:view" : "home:view"))
+        int rank = ROLE_ORDER.indexOf(role);
+        List<String> granted = ROLE_ORDER.subList(0, Math.max(rank, 0) + 1);
+        return permissionMapper.selectList(new LambdaQueryWrapper<Permission>()
+                        .eq(Permission::getStatus, 1)
+                        .in(Permission::getRoleCode, granted))
                 .stream().map(Permission::getPermissionCode).distinct().toList();
     }
 
